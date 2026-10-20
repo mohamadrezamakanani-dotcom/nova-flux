@@ -1,0 +1,170 @@
+{
+  "application": "Nova Flux",
+  "boundary_tests": {
+    "builder": 12,
+    "scripts": 44,
+    "source_archives_and_bundle": 20
+  },
+  "corresponding_source": {
+    "builder_sha256": "52d7698ae4ca415b7515bf8bf030f5ac005a9726b6c1a553334400f4ecd9df4b",
+    "bytes": 34597131,
+    "filename": "Nova-Flux-2.3.1-FFmpeg-sources.zip",
+    "original_archives": 9,
+    "sha256": "2d455cac22950eabcadbd23f8e30a147d887516403c51821b1af766d80ca05f5"
+  },
+  "evidence_date": "2026-10-21",
+  "final_ci_run": "39513080541",
+  "manual_macos_target_size": {
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "frame_rate": "30/1",
+    "frames": 90,
+    "full_decode": "PASS",
+    "input_bytes": 3653251,
+    "input_duration": "3.021000",
+    "maximum_bytes": 500000,
+    "output_bytes": 486199,
+    "output_duration": "3.008000",
+    "output_sha256": "137a70b62642c78e00eaa085d7aa40de5214e08335e5491d2f0ab316e1ace9ed",
+    "source_sha256": "cac0da94a9c73171d02f94464837e24d8bbf9f5b498a474cd238de7a4afc9df5",
+    "status": "PASS"
+  },
+  "packaging_commit": "31b6ab2",
+  "platforms": {
+    "linux-x86_64": {
+      "application_sha256": "1b3d8333298f12ecf1046cccd19b973725c9de899864a7fc6c6d8ee90172fb9a",
+      "application_test_commit": "25529569e1c6d6d24c6979d50fe7e6f97601b046",
+      "archive": "Nova-Flux-2.3.1-linux-x86_64.tar.gz",
+      "archive_bytes": 71314495,
+      "archive_sha256": "adbd4b2ff06389a6a76abd3c7ff6b9040167bfdca63adc56c9d16be4aa165110",
+      "codec_smoke_cases": 12,
+      "codec_smoke_status": "PASS",
+      "diagnose": {
+        "app_version": "2.3.1",
+        "error": null,
+        "ready": true,
+        "version": "ffmpeg version 8.1.3 Copyright (c) 2000-2026 the FFmpeg developers"
+      },
+      "extracted_gui": {
+        "adapter": "Some(AdapterInfo { name: \"llvmpipe (LLVM 15.0.7, 256 bits)\", vendor: 65541, device: 0, device_type: Cpu, device_pci_bus_id: \"\", driver: \"llvmpipe\", driver_info: \"Mesa 23.2.1-1ubuntu3.1~22.04.4 (LLVM 15.0.7)\", backend: Vulkan, subgroup_min_size: 8, subgroup_max_size: 8, transient_saves_memory: Some(false), limit_bucket: None })",
+        "frames": 135,
+        "image": {
+          "bytes": 134218,
+          "height": 800,
+          "sha256": "a15be3b7d5dc349bb39e2ba3947456d0d5648521eb70f1d9b2956ee2298cbe34",
+          "width": 1180
+        },
+        "status": "PASS"
+      },
+      "host": {
+        "architecture": "x86_64",
+        "os": "Linux",
+        "python": "3.12.15"
+      },
+      "input_application_sha256": "1b3d8333298f12ecf1046cccd19b973725c9de899864a7fc6c6d8ee90172fb9a",
+      "native_tests": {
+        "executables": 9,
+        "failed": 0,
+        "ignored": 0,
+        "passed": 100
+      },
+      "offline_inventory_and_notice_check": "PASS",
+      "rust_notice_crates": 268,
+      "rust_notice_target": "x86_64-unknown-linux-gnu",
+      "status": "PASS",
+      "verified_files": 1728
+    },
+    "macos-arm64": {
+      "application_sha256": "3fc9d9ecfcc66d1a293a0fdf6ee4bbfbf0d8eb9b88393ec04438f8ff696220ee",
+      "application_test_commit": "25529569e1c6d6d24c6979d50fe7e6f97601b046",
+      "archive": "Nova-Flux-2.3.1-macos-arm64.zip",
+      "archive_bytes": 71124115,
+      "archive_sha256": "e9e16f5e9e3aef61453a82719117a46d67d938ff766eba9ffa54e89fef3979cf",
+      "codec_smoke_cases": 12,
+      "codec_smoke_status": "PASS",
+      "diagnose": {
+        "app_version": "2.3.1",
+        "error": null,
+        "ready": true,
+        "version": "ffmpeg version 8.1.3 Copyright (c) 2000-2026 the FFmpeg developers"
+      },
+      "extracted_gui": {
+        "adapter": "Some(AdapterInfo { name: \"Apple M4\", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"\", driver_info: \"\", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None })",
+        "frames": 181,
+        "image": {
+          "bytes": 454597,
+          "height": 1600,
+          "sha256": "bba1213c395652d19bde76de1de67d8878192389fe5e206ce42df93e23a675ab",
+          "width": 2360
+        },
+        "status": "PASS"
+      },
+      "host": {
+        "architecture": "arm64",
+        "os": "Darwin",
+        "python": "3.15.0"
+      },
+      "input_application_sha256": "438b8d7697964c0ee21ce06ec673c54d9aee62d848d04bdceab30b54885f5bdf",
+      "native_tests": {
+        "executables": 9,
+        "failed": 0,
+        "ignored": 0,
+        "passed": 100
+      },
+      "offline_inventory_and_notice_check": "PASS",
+      "rust_notice_crates": 154,
+      "rust_notice_target": "aarch64-apple-darwin",
+      "status": "PASS",
+      "verified_files": 2575
+    },
+    "windows-x86_64": {
+      "application_sha256": "fd4e785b5312a1c932222ae77b31c7b4de6ea3b0a088bccd578ce094c095223f",
+      "application_test_commit": "83dc3c6f798b1e030c56f781986ed9cd9fe4f74b",
+      "archive": "Nova-Flux-2.3.1-windows-x86_64.zip",
+      "archive_bytes": 78460971,
+      "archive_sha256": "6e7da7399ec5afac9db04ab3444f1eab3cea070367fff808b68161977553d265",
+      "codec_smoke_cases": 12,
+      "codec_smoke_status": "PASS",
+      "diagnose": {
+        "app_version": "2.3.1",
+        "error": null,
+        "ready": true,
+        "version": "ffmpeg version 8.1.3 Copyright (c) 2000-2026 the FFmpeg developers"
+      },
+      "extracted_gui": {
+        "adapter": "Some(AdapterInfo { name: \"Microsoft Basic Render Driver\", vendor: 5140, device: 140, device_type: Cpu, device_pci_bus_id: \"\", driver: \"10.0.20348.5386\", driver_info: \"\", backend: Dx12, subgroup_min_size: 4, subgroup_max_size: 4, transient_saves_memory: Some(false), limit_bucket: None })",
+        "frames": 23,
+        "image": {
+          "bytes": 145748,
+          "height": 768,
+          "sha256": "3278c10ddbd63c8eeea3a20a0eabcfb250ad90b636f6173d270d4499b1f32d0d",
+          "width": 1024
+        },
+        "status": "PASS"
+      },
+      "host": {
+        "architecture": "AMD64",
+        "os": "Windows",
+        "python": "3.12.10"
+      },
+      "input_application_sha256": "fd4e785b5312a1c932222ae77b31c7b4de6ea3b0a088bccd578ce094c095223f",
+      "native_tests": {
+        "executables": 9,
+        "failed": 0,
+        "ignored": 0,
+        "passed": 78
+      },
+      "offline_inventory_and_notice_check": "PASS",
+      "rust_notice_crates": 155,
+      "rust_notice_target": "x86_64-pc-windows-msvc",
+      "status": "PASS",
+      "verified_files": 1534
+    }
+  },
+  "schema": 1,
+  "scope": "Matched native source/runtime/notices packages; physical Windows/Linux manual desktop acceptance is not claimed",
+  "status": "PASS",
+  "version": "2.3.1"
+}
