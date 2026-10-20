@@ -1,0 +1,368 @@
+{
+  "/Applications/Shotcut.app/Contents/MacOS/ffmpeg": {
+    "bytes": 445456,
+    "deps": [
+      "/Applications/Shotcut.app/Contents/Frameworks/libavdevice.62.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libavfilter.11.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libavformat.62.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libavcodec.62.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libswresample.6.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libswscale.9.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libavutil.60.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libxcb.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libxcb-shm.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libxcb-shape.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libxcb-xfixes.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libz.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libvmaf.3.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libzimg.2.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libbz2.1.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libvpx.9.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libwebpmux.3.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libiconv.2.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/liblzma.5.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libdav1d.7.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libaom.3.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libmp3lame.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libopus.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libSvtAv1Enc.3.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libtheoraenc.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libtheoradec.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libogg.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libvorbis.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libvorbisenc.2.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libwebp.7.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libx264.157.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libx265.209.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libX11.6.dylib"
+    ]
+  },
+  "/Applications/Shotcut.app/Contents/MacOS/ffprobe": {
+    "bytes": 239680,
+    "deps": [
+      "/Applications/Shotcut.app/Contents/Frameworks/libavdevice.62.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libavfilter.11.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libavformat.62.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libavcodec.62.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libswresample.6.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libswscale.9.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libavutil.60.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libxcb.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libxcb-shm.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libxcb-shape.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libxcb-xfixes.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libz.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libvmaf.3.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libzimg.2.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libbz2.1.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libvpx.9.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libwebpmux.3.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libiconv.2.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/liblzma.5.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libdav1d.7.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libaom.3.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libmp3lame.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libopus.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libSvtAv1Enc.3.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libtheoraenc.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libtheoradec.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libogg.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libvorbis.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libvorbisenc.2.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libwebp.7.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libx264.157.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libx265.209.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libX11.6.dylib"
+    ]
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libavdevice.62.dylib": {
+    "bytes": 123648,
+    "deps": [
+      "/Applications/Shotcut.app/Contents/Frameworks/libavfilter.11.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libswscale.9.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libavformat.62.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libavcodec.62.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libswresample.6.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libavutil.60.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libxcb.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libxcb-shm.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libxcb-shape.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libxcb-xfixes.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libz.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libvmaf.3.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libzimg.2.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libbz2.1.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libvpx.9.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libwebpmux.3.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libiconv.2.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/liblzma.5.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libdav1d.7.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libaom.3.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libmp3lame.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libopus.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libSvtAv1Enc.3.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libtheoraenc.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libtheoradec.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libogg.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libvorbis.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libvorbisenc.2.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libwebp.7.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libx264.157.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libx265.209.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libX11.6.dylib"
+    ]
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libavfilter.11.dylib": {
+    "bytes": 4063680,
+    "deps": [
+      "/Applications/Shotcut.app/Contents/Frameworks/libswscale.9.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libavformat.62.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libavcodec.62.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libswresample.6.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libavutil.60.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libz.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libvmaf.3.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libzimg.2.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libbz2.1.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libvpx.9.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libwebpmux.3.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libiconv.2.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/liblzma.5.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libdav1d.7.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libaom.3.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libmp3lame.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libopus.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libSvtAv1Enc.3.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libtheoraenc.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libtheoradec.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libogg.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libvorbis.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libvorbisenc.2.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libwebp.7.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libx264.157.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libx265.209.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libX11.6.dylib"
+    ]
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libavformat.62.dylib": {
+    "bytes": 2598640,
+    "deps": [
+      "/Applications/Shotcut.app/Contents/Frameworks/libavcodec.62.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libswresample.6.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libavutil.60.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libbz2.1.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libz.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libvpx.9.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libwebpmux.3.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libiconv.2.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/liblzma.5.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libdav1d.7.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libaom.3.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libmp3lame.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libopus.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libSvtAv1Enc.3.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libtheoraenc.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libtheoradec.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libogg.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libvorbis.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libvorbisenc.2.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libwebp.7.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libx264.157.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libx265.209.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libX11.6.dylib"
+    ]
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libavcodec.62.dylib": {
+    "bytes": 13399584,
+    "deps": [
+      "/Applications/Shotcut.app/Contents/Frameworks/libswresample.6.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libavutil.60.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libvpx.9.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libwebpmux.3.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libiconv.2.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/liblzma.5.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libdav1d.7.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libaom.3.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libmp3lame.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libopus.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libSvtAv1Enc.3.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libtheoraenc.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libtheoradec.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libogg.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libvorbis.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libvorbisenc.2.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libwebp.7.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libx264.157.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libx265.209.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libz.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libX11.6.dylib"
+    ]
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libswresample.6.dylib": {
+    "bytes": 121808,
+    "deps": [
+      "/Applications/Shotcut.app/Contents/Frameworks/libavutil.60.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libz.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libX11.6.dylib"
+    ]
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libswscale.9.dylib": {
+    "bytes": 1068624,
+    "deps": [
+      "/Applications/Shotcut.app/Contents/Frameworks/libavutil.60.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libz.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libX11.6.dylib"
+    ]
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libavutil.60.dylib": {
+    "bytes": 744128,
+    "deps": [
+      "/Applications/Shotcut.app/Contents/Frameworks/libz.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libX11.6.dylib"
+    ]
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libxcb.1.dylib": {
+    "bytes": 211600,
+    "deps": [
+      "/Applications/Shotcut.app/Contents/Frameworks/libXau.6.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libXdmcp.6.dylib"
+    ]
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libxcb-shm.0.dylib": {
+    "bytes": 70624,
+    "deps": [
+      "/Applications/Shotcut.app/Contents/Frameworks/libxcb.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libXau.6.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libXdmcp.6.dylib"
+    ]
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libxcb-shape.0.dylib": {
+    "bytes": 71520,
+    "deps": [
+      "/Applications/Shotcut.app/Contents/Frameworks/libxcb.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libXau.6.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libXdmcp.6.dylib"
+    ]
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libxcb-xfixes.0.dylib": {
+    "bytes": 81216,
+    "deps": [
+      "/Applications/Shotcut.app/Contents/Frameworks/libxcb.1.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libXau.6.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libXdmcp.6.dylib"
+    ]
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libz.1.dylib": {
+    "bytes": 124848,
+    "deps": []
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libvmaf.3.dylib": {
+    "bytes": 347280,
+    "deps": []
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libzimg.2.dylib": {
+    "bytes": 397904,
+    "deps": []
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libbz2.1.0.dylib": {
+    "bytes": 126368,
+    "deps": []
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libvpx.9.dylib": {
+    "bytes": 2627984,
+    "deps": []
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libwebpmux.3.dylib": {
+    "bytes": 90144,
+    "deps": [
+      "/Applications/Shotcut.app/Contents/Frameworks/libwebp.7.dylib"
+    ]
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libiconv.2.dylib": {
+    "bytes": 1174976,
+    "deps": []
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/liblzma.5.dylib": {
+    "bytes": 218416,
+    "deps": []
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libdav1d.7.dylib": {
+    "bytes": 814688,
+    "deps": []
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libaom.3.dylib": {
+    "bytes": 4003184,
+    "deps": []
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libmp3lame.0.dylib": {
+    "bytes": 305360,
+    "deps": []
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libopus.0.dylib": {
+    "bytes": 374256,
+    "deps": []
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libSvtAv1Enc.3.dylib": {
+    "bytes": 3097776,
+    "deps": []
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libtheoraenc.1.dylib": {
+    "bytes": 211040,
+    "deps": [
+      "/Applications/Shotcut.app/Contents/Frameworks/libogg.0.dylib"
+    ]
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libtheoradec.1.dylib": {
+    "bytes": 108160,
+    "deps": []
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libogg.0.dylib": {
+    "bytes": 88800,
+    "deps": []
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libvorbis.0.dylib": {
+    "bytes": 229344,
+    "deps": [
+      "/Applications/Shotcut.app/Contents/Frameworks/libogg.0.dylib"
+    ]
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libvorbisenc.2.dylib": {
+    "bytes": 831072,
+    "deps": [
+      "/Applications/Shotcut.app/Contents/Frameworks/libvorbis.0.dylib",
+      "/Applications/Shotcut.app/Contents/Frameworks/libogg.0.dylib"
+    ]
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libwebp.7.dylib": {
+    "bytes": 353440,
+    "deps": [
+      "/Applications/Shotcut.app/Contents/Frameworks/libsharpyuv.0.dylib"
+    ]
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libx264.157.dylib": {
+    "bytes": 1717808,
+    "deps": []
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libx265.209.dylib": {
+    "bytes": 2125024,
+    "deps": []
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libX11.6.dylib": {
+    "bytes": 1164736,
+    "deps": [
+      "/Applications/Shotcut.app/Contents/Frameworks/libxcb.1.dylib"
+    ]
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libXau.6.dylib": {
+    "bytes": 70064,
+    "deps": []
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libXdmcp.6.dylib": {
+    "bytes": 70960,
+    "deps": []
+  },
+  "/Applications/Shotcut.app/Contents/Frameworks/libsharpyuv.0.dylib": {
+    "bytes": 70080,
+    "deps": []
+  }
+}

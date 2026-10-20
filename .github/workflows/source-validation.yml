@@ -1,0 +1,71 @@
+name: Public source validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, 'codex/**']
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: public-source-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  native:
+    if: github.event.repository.private == false
+    name: Source ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-2022
+            platform: windows-x86_64
+          - os: ubuntu-22.04
+            platform: linux-x86_64
+    env:
+      CARGO_BUILD_JOBS: '2'
+      CARGO_TERM_COLOR: never
+      CARGO_PROFILE_DEV_DEBUG: '0'
+      CARGO_PROFILE_TEST_DEBUG: '0'
+      CARGO_INCREMENTAL: '0'
+      RUST_BACKTRACE: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install pinned Rust toolchain
+        run: rustup toolchain install 1.99.0 --profile minimal --component rustfmt --component clippy
+      - name: Install Linux desktop and software-rendering dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxkbcommon-dev libwayland-dev libx11-dev libxcursor-dev libxrandr-dev libxi-dev libxinerama-dev libgl1-mesa-dev libegl1-mesa-dev libvulkan1 mesa-vulkan-drivers vulkan-tools xvfb xauth xdg-utils
+      - name: Native Windows source, media and GUI validation
+        if: runner.os == 'Windows'
+        env:
+          WGPU_BACKEND: dx12
+          NOVA_WGPU_FORCE_FALLBACK: '1'
+        run: python -u scripts/run_validation.py --platform windows-x86_64 --runtime runtime --report-dir validation/windows-x86_64 --toolchain 1.99.0 --source-only
+      - name: Native Linux source, media and GUI validation
+        if: runner.os == 'Linux'
+        env:
+          WGPU_BACKEND: vulkan
+          LIBGL_ALWAYS_SOFTWARE: '1'
+          VK_ICD_FILENAMES: /usr/share/vulkan/icd.d/lvp_icd.x86_64.json
+        run: xvfb-run -a -s '-screen 0 1440x1000x24' python3 -u scripts/run_validation.py --platform linux-x86_64 --runtime runtime --report-dir validation/linux-x86_64 --toolchain 1.99.0 --source-only
+      - name: Upload source validation evidence without binaries or runtimes
+        if: always() && github.event.repository.private == false
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: source-evidence-${{ matrix.platform }}-${{ github.run_attempt }}
+          retention-days: 1
+          if-no-files-found: warn
+          path: |
+            validation/${{ matrix.platform }}/report.json
+            validation/${{ matrix.platform }}/*.log
+            validation/${{ matrix.platform }}/*.png

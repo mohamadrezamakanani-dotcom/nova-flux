@@ -1,0 +1,15 @@
+/target
+/runtime
+.DS_Store
+
+__pycache__/
+*.pyc
+
+/dist
+/.runtime-downloads
+/.ci-state
+/validation-logs
+/smoke.png
+*.app/
+
+/validation
