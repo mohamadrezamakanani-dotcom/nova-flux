@@ -237,6 +237,12 @@ def normalize_generated_provenance(runtime, mappings):
     for path in sorted((runtime / "provenance").rglob("*.log")):
         before = path.read_bytes()
         after = before
+        if path.relative_to(runtime).as_posix() == "provenance/configuration/ffmpeg/ffbuild/config.log":
+            # FFmpeg configure invokes `set >> $logfile`, which dumps the
+            # complete shell environment, unrelated to corresponding source.
+            # Keep that diagnostic in private CI, never in a public package.
+            after = ("The private FFmpeg configure diagnostic contains a full shell environment dump and is not redistributed.\n"
+                     "Exact configure/build commands, flags, tools and source hashes are retained in build-manifest.json; final configuration is retained beside this file.\n").encode()
         for original, replacement in mappings:
             for form in {original, original.replace("\\", "/"), original.replace("\\", "\\\\")}:
                 if form:
@@ -247,7 +253,7 @@ def normalize_generated_provenance(runtime, mappings):
     if changes:
         manifest_path = runtime / "manifest.json"
         value = json.loads(manifest_path.read_text())
-        value["packaging_provenance"] = {"operation": "Normalize host paths in generated build logs only; binaries, commands, source archives, recipes and original notices are unchanged", "original_runtime_manifest_sha256": digest(manifest_path), "changed_logs": changes}
+        value["packaging_provenance"] = {"operation": "Omit the private FFmpeg shell-environment dump and normalize host paths in other generated logs only; binaries, commands, source archives, recipes and original notices are unchanged", "original_runtime_manifest_sha256": digest(manifest_path), "changed_logs": changes}
         value["files"] = inventory(runtime, exclude=("manifest.json",))
         manifest_path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return changes

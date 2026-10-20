@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   native:
-    if: github.event.repository.private == true && github.ref != 'refs/heads/codex/runtime-source-release'
+    if: github.event.repository.private == true && github.ref != 'refs/heads/codex/runtime-source-release' && github.ref != 'refs/heads/codex/final-runtime-packages'
     name: Private ${{ matrix.platform }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 45

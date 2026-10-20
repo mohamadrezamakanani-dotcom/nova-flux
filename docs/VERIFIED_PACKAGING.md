@@ -11,7 +11,7 @@ python3 scripts/package_verified.py \
   --runtime ../nova-runtime-macos \
   --notices ../nova-notices-macos \
   --binary target/release/nova-flux \
-  --source-bundle ../Nova-Flux-2.3.1-runtime-sources.zip \
+  --source-bundle ../Nova-Flux-2.3.1-FFmpeg-sources.zip \
   --destination ../nova-release-macos
 ```
 
@@ -65,10 +65,15 @@ Dynamically loaded optional OS/GPU facilities still need native application
 acceptance testing.
 
 The privacy gate checks staged bytes for this machine's actual home and
-repository paths. It rejects a leak and requires a rebuild with source paths
-remapped. It never rewrites upstream copyrights, author names, email addresses,
-or license text. Build the Rust application and media runtime with appropriate
-path remapping before invoking this packager.
+repository paths. It rejects leaks in executable/source/notice bytes and requires
+a rebuild with source paths remapped. Generated build logs alone receive path
+normalization during staging. FFmpeg's configure diagnostic dumps the entire
+shell environment; its public copy is replaced with an omission notice. Exact
+commands, flags, tools, source hashes and final config.mak remain available.
+The runtime manifest records original and packaged log hashes and the original
+runtime-manifest hash. Executables, build commands, original source archives,
+recipes, copyrights and license text are unchanged. Unmodified diagnostics stay
+in private CI evidence; they are unnecessary for building the media executables.
 
 ## Package layout and native verification
 

@@ -139,7 +139,7 @@ class VerifiedPackagingTests(unittest.TestCase):
     def test_generated_windows_log_normalization_preserves_inputs_and_records_change(self):
         runtime = self.root / "runtime"
         original = b"USERPROFILE='C:\\Users\\runneradmin'\nCFLAGS=-O2\n"
-        self.write("runtime/provenance/configuration/ffmpeg/ffbuild/config.log", original)
+        self.write("runtime/provenance/configuration/zlib/config.log", original)
         binary = self.write("runtime/bin/ffmpeg.exe", b"binary bytes")
         notice = self.write("runtime/licenses/LICENSE", b"Original author C:\\Users\\runneradmin")
         value = {"schema_version": 1, "files": package.inventory(runtime)}
@@ -158,6 +158,15 @@ class VerifiedPackagingTests(unittest.TestCase):
         self.assertIn("Nova Flux.app/Contents/Resources/licenses/application-LICENSE.txt", text)
         self.assertIn("Nova Flux.app/Contents/Resources/runtime/source/", text)
         self.assertIn("relative to the extracted top-level", text)
+
+    def test_ffmpeg_environment_dump_stays_private(self):
+        runtime = self.root / "runtime"
+        self.write("runtime/provenance/configuration/ffmpeg/ffbuild/config.log", b"# configure --enable-gpl\nPGPASSWORD=fixture-secret\n")
+        self.write("runtime/manifest.json", b'{"files": []}')
+        changes = package.normalize_generated_provenance(runtime, [])
+        self.assertEqual(len(changes), 1)
+        self.assertNotIn(b"fixture-secret", (runtime / changes[0]["path"]).read_bytes())
+        self.assertIn(b"build-manifest.json", (runtime / changes[0]["path"]).read_bytes())
 
 
 if __name__ == "__main__":
