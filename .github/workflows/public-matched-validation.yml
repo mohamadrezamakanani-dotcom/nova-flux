@@ -1,0 +1,205 @@
+name: Public matched-source validation
+
+# Expensive native source builds are an explicit maintainer action. This never
+# creates a release or replaces assets already published under an existing tag.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: public-matched-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  native:
+    if: github.event.repository.private == false
+    name: Matched ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-14
+            platform: macos-arm64
+            rust_target: aarch64-apple-darwin
+          - os: windows-2022
+            platform: windows-x86_64
+            rust_target: x86_64-pc-windows-msvc
+          - os: ubuntu-22.04
+            platform: linux-x86_64
+            rust_target: x86_64-unknown-linux-gnu
+    env:
+      PLATFORM: ${{ matrix.platform }}
+      CARGO_BUILD_JOBS: '2'
+      CARGO_TERM_COLOR: never
+      CARGO_PROFILE_DEV_DEBUG: '0'
+      CARGO_PROFILE_TEST_DEBUG: '0'
+      CARGO_INCREMENTAL: '0'
+      RUST_BACKTRACE: '1'
+      MACOSX_DEPLOYMENT_TARGET: '12.0'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - name: Verify native runner and derive archive names from Cargo.toml
+        shell: python
+        run: |
+          import os, platform, re, tomllib
+          from pathlib import Path
+          target = os.environ['PLATFORM']
+          expected = {'macos-arm64': ('Darwin', {'arm64', 'aarch64'}), 'windows-x86_64': ('Windows', {'amd64', 'x86_64'}), 'linux-x86_64': ('Linux', {'amd64', 'x86_64'})}
+          system, architectures = expected[target]
+          assert platform.system() == system and platform.machine().lower() in architectures, 'Native OS/architecture does not match matrix target'
+          version = tomllib.loads(Path('Cargo.toml').read_text(encoding='utf-8'))['package']['version']
+          assert re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?', version), 'Unsafe application version'
+          extension = '.tar.gz' if target == 'linux-x86_64' else '.zip'
+          binary = 'target/release/nova-flux' + ('.exe' if target == 'windows-x86_64' else '')
+          values = {'NOVA_VERSION': version, 'SOURCE_ARCHIVE': f'dist/Nova-Flux-{version}-FFmpeg-sources.zip', 'PACKAGE_ARCHIVE': f'dist/packages/Nova-Flux-{version}-{target}{extension}', 'APPLICATION_BINARY': binary}
+          with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8') as destination:
+              for key, value in values.items():
+                  destination.write(f'{key}={value}\n')
+          print(f'Native {target}; application {version}')
+      - name: Install pinned Rust toolchain and its original notices
+        run: rustup toolchain install 1.99.0 --profile minimal --component rustfmt --component clippy --component rust-docs
+      - name: Set native MSVC static runtime and public Rust path mappings
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          "RUSTFLAGS=-C target-feature=+crt-static --remap-path-prefix=$env:GITHUB_WORKSPACE=/nova-source --remap-path-prefix=$env:USERPROFILE=/nova-home" >> $env:GITHUB_ENV
+      - name: Set public Rust path mappings
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          echo "RUSTFLAGS=--remap-path-prefix=$GITHUB_WORKSPACE=/nova-source --remap-path-prefix=$HOME=/nova-home" >> "$GITHUB_ENV"
+      - name: Install macOS native build tools
+        if: runner.os == 'macOS'
+        run: |
+          xcode-select -p
+          brew install cmake meson ninja pkgconf
+      - name: Install Linux native build and desktop dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake meson ninja-build pkg-config nasm perl xz-utils libxkbcommon-dev libxkbcommon-x11-dev libwayland-dev libx11-dev libxcursor-dev libxrandr-dev libxi-dev libxinerama-dev libgl1-mesa-dev libegl1-mesa-dev libvulkan1 mesa-vulkan-drivers vulkan-tools xvfb xauth xdg-utils
+      - name: Install Windows UCRT native codec build tools
+        if: runner.os == 'Windows'
+        uses: msys2/setup-msys2@ec48f7c5447b3140e2b088413ae3a55687bccb6e # v2
+        with:
+          msystem: UCRT64
+          update: true
+          install: >-
+            make
+            diffutils
+            perl
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-python
+            mingw-w64-ucrt-x86_64-binutils
+            mingw-w64-ucrt-x86_64-cmake
+            mingw-w64-ucrt-x86_64-meson
+            mingw-w64-ucrt-x86_64-ninja
+            mingw-w64-ucrt-x86_64-pkgconf
+            mingw-w64-ucrt-x86_64-nasm
+      - name: Validate source acquisition and corresponding-source packaging boundaries
+        run: python -B -m unittest discover -s scripts/runtime-source -p 'test_*.py' -v
+      - name: Validate the frozen native builder contract
+        run: python scripts/runtime-source/build_runtime.py --self-test
+      - name: Build Windows codec runtime from all nine locked original sources
+        if: runner.os == 'Windows'
+        shell: msys2 {0}
+        run: |
+          python -u scripts/runtime-source/acquire_sources.py --cache-dir codec-sources --extract
+          python -u scripts/runtime-source/build_runtime.py --platform windows-x86_64 --sources codec-sources --work-dir codec-build --destination runtime --jobs 4
+      - name: Build macOS or Linux codec runtime from all nine locked original sources
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          python3 -u scripts/runtime-source/acquire_sources.py --cache-dir codec-sources --extract
+          python3 -u scripts/runtime-source/build_runtime.py --platform "$PLATFORM" --sources codec-sources --work-dir codec-build --destination runtime --jobs 4
+      # Cargo and application packaging use the native host shell. In
+      # particular, Windows Rust must not inherit the MSYS GNU linker shell.
+      - name: Fetch locked application dependency archives
+        run: cargo +1.99.0 fetch --locked
+      - name: Collect exact native Rust, embedded font and compiler notices
+        run: python -u scripts/collect_binary_notices.py --target ${{ matrix.rust_target }} --toolchain 1.99.0 --output binary-notices
+      - name: Native macOS application, media and Metal GUI acceptance
+        if: runner.os == 'macOS'
+        env:
+          WGPU_BACKEND: metal
+        run: python -u scripts/run_validation.py --platform macos-arm64 --runtime runtime --report-dir validation/macos-arm64 --toolchain 1.99.0 --source-only
+      - name: Native Windows application, media and rendered GUI acceptance
+        if: runner.os == 'Windows'
+        env:
+          WGPU_BACKEND: dx12
+          NOVA_WGPU_FORCE_FALLBACK: '1'
+        run: python -u scripts/run_validation.py --platform windows-x86_64 --runtime runtime --report-dir validation/windows-x86_64 --toolchain 1.99.0 --source-only
+      - name: Native Linux application, media and rendered GUI acceptance
+        if: runner.os == 'Linux'
+        env:
+          WGPU_BACKEND: vulkan
+          LIBGL_ALWAYS_SOFTWARE: '1'
+          VK_ICD_FILENAMES: /usr/share/vulkan/icd.d/lvp_icd.x86_64.json
+        run: xvfb-run -a -s '-screen 0 1440x1000x24' python3 -u scripts/run_validation.py --platform linux-x86_64 --runtime runtime --report-dir validation/linux-x86_64 --toolchain 1.99.0 --source-only
+      # No platform build-manifest is added: all hosts must produce the same
+      # original-source ZIP, regardless of their compiler or runtime bytes.
+      - name: Assemble and independently verify the common corresponding-source ZIP
+        run: python scripts/runtime-source/package_sources.py --cache codec-sources --destination source-stage --output "${{ env.SOURCE_ARCHIVE }}"
+      - name: Package the verified native application and source runtime
+        run: python scripts/package_verified.py --platform ${{ matrix.platform }} --runtime runtime --notices binary-notices --binary "${{ env.APPLICATION_BINARY }}" --source-bundle "${{ env.SOURCE_ARCHIVE }}" --destination dist/packages
+      - name: Safely extract the macOS package and verify its actual Metal rendering
+        if: runner.os == 'macOS'
+        env:
+          WGPU_BACKEND: metal
+        run: python scripts/check_verified_package.py --platform macos-arm64 --archive "${{ env.PACKAGE_ARCHIVE }}" --report-dir validation/extracted-macos-arm64
+      - name: Safely extract the Windows package and verify its actual rendering
+        if: runner.os == 'Windows'
+        env:
+          WGPU_BACKEND: dx12
+          NOVA_WGPU_FORCE_FALLBACK: '1'
+        run: python scripts/check_verified_package.py --platform windows-x86_64 --archive "${{ env.PACKAGE_ARCHIVE }}" --report-dir validation/extracted-windows-x86_64
+      - name: Safely extract the Linux package and verify its actual rendering
+        if: runner.os == 'Linux'
+        env:
+          WGPU_BACKEND: vulkan
+          LIBGL_ALWAYS_SOFTWARE: '1'
+          VK_ICD_FILENAMES: /usr/share/vulkan/icd.d/lvp_icd.x86_64.json
+        run: xvfb-run -a -s '-screen 0 1440x1000x24' python scripts/check_verified_package.py --platform linux-x86_64 --archive "${{ env.PACKAGE_ARCHIVE }}" --report-dir validation/extracted-linux-x86_64
+      - name: Export compact public evidence and bound archive/source hashes
+        if: always() && env.NOVA_VERSION != ''
+        run: python scripts/public_release_evidence.py --platform ${{ matrix.platform }} --validation-dir validation/${{ matrix.platform }} --extracted-dir validation/extracted-${{ matrix.platform }} --packages-dir dist/packages --source-bundle "${{ env.SOURCE_ARCHIVE }}" --output public-evidence/${{ matrix.platform }}
+      - name: Upload sanitized reports and rendered PNG evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: matched-evidence-${{ matrix.platform }}-${{ github.run_attempt }}
+          retention-days: 1
+          if-no-files-found: warn
+          path: |
+            public-evidence/${{ matrix.platform }}/*.json
+            public-evidence/${{ matrix.platform }}/*.png
+      - name: Upload the accepted final native package only
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: matched-package-${{ matrix.platform }}-${{ github.run_attempt }}
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: error
+          path: |
+            ${{ env.PACKAGE_ARCHIVE }}
+            ${{ env.PACKAGE_ARCHIVE }}.sha256
+      - name: Upload the common source archive once
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: matched-common-sources-${{ github.run_attempt }}
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: error
+          path: |
+            ${{ env.SOURCE_ARCHIVE }}
+            ${{ env.SOURCE_ARCHIVE }}.sha256

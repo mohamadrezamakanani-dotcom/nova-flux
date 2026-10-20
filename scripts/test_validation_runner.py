@@ -10,9 +10,30 @@ import struct
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 import zlib
 
 from run_validation import Validation, png_info, validate_smoke
+import run_validation
+
+
+class NativeSourceHostTests(unittest.TestCase):
+    def test_macos_source_validation_requires_an_existing_native_runtime(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            runtime = Path(temporary)
+            with patch("run_validation.platform.system", return_value="Darwin"), patch("run_validation.platform.machine", return_value="arm64"):
+                run_validation.require_validation_host("macos-arm64", source_only=True, runtime=runtime)
+                with self.assertRaises(ValueError):
+                    run_validation.require_validation_host("macos-arm64", source_only=True, runtime=runtime / "missing")
+
+    def test_macos_cannot_enter_the_legacy_private_packager_or_an_intel_host(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            with patch("run_validation.platform.system", return_value="Darwin"), patch("run_validation.platform.machine", return_value="arm64"):
+                with self.assertRaises(ValueError):
+                    run_validation.require_validation_host("macos-arm64", source_only=False, runtime=Path(temporary))
+            with patch("run_validation.platform.system", return_value="Darwin"), patch("run_validation.platform.machine", return_value="x86_64"):
+                with self.assertRaises(ValueError):
+                    run_validation.require_validation_host("macos-arm64", source_only=True, runtime=Path(temporary))
 
 
 def png(width: int = 640, height: int = 480) -> bytes:

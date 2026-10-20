@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Native Windows/Linux private CI validation with durable JSON and log evidence."""
+"""Native source validation and legacy private portable-package acceptance."""
 from __future__ import annotations
 
 import argparse
@@ -19,6 +19,20 @@ import time
 import zlib
 
 from portable_common import PLATFORMS, require_host, sha256
+
+VALIDATION_PLATFORMS = (*PLATFORMS, "macos-arm64")
+
+
+def require_validation_host(target: str, *, source_only: bool, runtime: Path) -> None:
+    if target != "macos-arm64":
+        require_host(target)
+        return
+    # The legacy prebuilt-runtime fetcher/private packager supports only
+    # Windows/Linux. macOS acceptance uses an already built native runtime.
+    if not source_only or runtime.is_symlink() or not runtime.is_dir():
+        raise ValueError("macOS validation requires --source-only and an existing native runtime directory")
+    if platform.system() != "Darwin" or platform.machine().lower() not in ("arm64", "aarch64"):
+        raise ValueError("Native macos-arm64 host required")
 
 
 def utc_now() -> str:
@@ -200,7 +214,7 @@ def main() -> int:
         if hasattr(stream, "reconfigure"):
             stream.reconfigure(encoding="utf-8", errors="replace")
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--platform", choices=PLATFORMS, required=True)
+    parser.add_argument("--platform", choices=VALIDATION_PLATFORMS, required=True)
     parser.add_argument("--runtime", type=Path, default=Path("runtime"))
     parser.add_argument("--report-dir", type=Path, required=True)
     parser.add_argument("--package-destination", type=Path, default=Path("dist"))
@@ -225,8 +239,8 @@ def main() -> int:
     validation.save()
     try:
         private_repository_guard(args.source_only)
-        require_host(args.platform)
         runtime = args.runtime.absolute()
+        require_validation_host(args.platform, source_only=args.source_only, runtime=runtime)
         environment = os.environ.copy()
         environment.update({
             "NOVA_RUNTIME": str(runtime), "NOVA_TEST_RUNTIME": str(runtime),

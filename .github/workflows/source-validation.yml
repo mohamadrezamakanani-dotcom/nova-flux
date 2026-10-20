@@ -1,10 +1,40 @@
-name: Public source validation
+name: Source validation
 
 on:
   workflow_dispatch:
   push:
     branches: [main, 'codex/**']
+    paths:
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - 'rust-toolchain*'
+      - '.cargo/**'
+      - 'src/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - '!scripts/**/*.md'
+      - 'assets/**'
+      - '!assets/screenshots/**'
+      - '!assets/social-preview*'
+      - '!assets/demo*'
+      - '!assets/demos/**'
+      - '.github/workflows/**'
   pull_request:
+    paths:
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - 'rust-toolchain*'
+      - '.cargo/**'
+      - 'src/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - '!scripts/**/*.md'
+      - 'assets/**'
+      - '!assets/screenshots/**'
+      - '!assets/social-preview*'
+      - '!assets/demo*'
+      - '!assets/demos/**'
+      - '.github/workflows/**'
 
 permissions:
   contents: read
