@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a vulnerability privately
+    url: https://github.com/mohamadrezamakanani-dotcom/nova-flux/security/advisories/new
+    about: Use GitHub private security reporting. Do not disclose vulnerabilities in public issues.
+  - name: Support and troubleshooting
+    url: https://github.com/mohamadrezamakanani-dotcom/nova-flux/blob/main/SUPPORT.md
+    about: Read package, platform, and safe diagnostic guidance before opening a report.
+  - name: Security policy and reporting availability
+    url: https://github.com/mohamadrezamakanani-dotcom/nova-flux/security
+    about: Check the security policy and reporting options if the private report form is unavailable.

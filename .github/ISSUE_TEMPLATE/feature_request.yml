@@ -1,0 +1,46 @@
+name: Feature request
+description: Explain a user problem and a focused improvement.
+title: "[Feature]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Search existing requests and read the [roadmap](https://github.com/mohamadrezamakanani-dotcom/nova-flux/blob/main/docs/ROADMAP.md) first. A request is not a commitment or a delivery date.
+        This form is public. Keep private media, personal details, credentials, and raw environment logs out of examples. Security reports belong in [private reporting](https://github.com/mohamadrezamakanani-dotcom/nova-flux/security/advisories/new).
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      description: Describe a concrete workflow and who it helps. Include the current limitation.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Give a focused example and explain how you would tell that the improvement works.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives and tradeoffs
+      description: Mention workarounds and any cost in quality, size, performance, privacy, or platform coverage.
+    validations:
+      required: false
+  - type: input
+    id: environment
+    attributes:
+      label: Relevant version and platform
+      description: Include OS/version and architecture when platform-specific, or say platform-independent.
+    validations:
+      required: true
+  - type: checkboxes
+    id: preparation
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing requests and reviewed the roadmap.
+          required: true
+        - label: My examples contain no private media, personal data, secrets, or raw environment dumps.
+          required: true

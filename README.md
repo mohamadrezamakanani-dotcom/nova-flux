@@ -1,102 +1,85 @@
-# Nova Flux
+<p align="center"><img src="assets/icon.png" width="96" alt="Nova Flux icon"></p>
 
-A local media converter with a native English interface written in Rust. Convert media on your own device, choose a verified size maximum, and keep original video dimensions and frame cadence.
+<h1 align="center">Nova Flux</h1>
 
-![Native Nova Flux interface](assets/screenshots/macos.png)
+<p align="center">Local media conversion. Built in Rust.</p>
 
-The UI, queue, settings, compression planning, resource scheduling and process control use Rust with egui/eframe/wgpu. FFmpeg and ffprobe are separate native codec tools. The application has no WebView, JavaScript UI, uploads, cloud account or runtime download.
+<p align="center">Convert audio and video, set a verified file-size maximum, and keep original video dimensions.</p>
 
-## Platform status
+[![Source validation](https://github.com/mohamadrezamakanani-dotcom/nova-flux/actions/workflows/source-validation.yml/badge.svg)](https://github.com/mohamadrezamakanani-dotcom/nova-flux/actions/workflows/source-validation.yml)
+[![MIT application code](https://img.shields.io/badge/application-MIT-blue)](LICENSE)
+[![Release 2.3.1 prerelease](https://img.shields.io/badge/release-2.3.1%20prerelease-ff7657)](https://github.com/mohamadrezamakanani-dotcom/nova-flux/releases/tag/v2.3.1)
 
-Rust supports many targets, but each operating system and processor requires its own executable, media runtime, packaging and tests. One macOS application cannot be used as a Windows or Linux executable.
+## Download
 
-| Platform | Target | Status |
+**Public prerelease 2.3.1.** Download the application archive for your operating system and processor:
+
+| System | Application download | Tested baseline |
 | --- | --- | --- |
-| macOS / Apple Silicon | arm64 | 2.3.1: 100 tests, native Metal window and actual UI conversion |
-| Windows | x86_64 | 2.3.1: 78 tests, DX12/WARP rendering and extracted-package launch |
-| Linux | x86_64 | 2.3.1: 100 tests, X11/Vulkan rendering and extracted-package launch |
+| macOS · Apple Silicon (M1 or newer) | [Download macOS ZIP](https://github.com/mohamadrezamakanani-dotcom/nova-flux/releases/download/v2.3.1/Nova-Flux-2.3.1-macos-arm64.zip) | Apple M4, macOS 27.0.1 |
+| Windows · x64 | [Download Windows ZIP](https://github.com/mohamadrezamakanani-dotcom/nova-flux/releases/download/v2.3.1/Nova-Flux-2.3.1-windows-x86_64.zip) | Windows Server 2022 native CI |
+| Linux · x64 | [Download Linux tar.gz](https://github.com/mohamadrezamakanani-dotcom/nova-flux/releases/download/v2.3.1/Nova-Flux-2.3.1-linux-x86_64.tar.gz) | Ubuntu 22.04, X11/Vulkan |
 
-This does not promise support for every Linux distribution, Windows version, processor, physical GPU, Android or iOS. See [cross-platform validation](docs/CROSS_PLATFORM.md) for actual OS/runner evidence. Versioned [validation records](VALIDATION.md) distinguish local acceptance, native CI and untested behavior.
+[All release files and SHA-256 checksums](https://github.com/mohamadrezamakanani-dotcom/nova-flux/releases/tag/v2.3.1) · [Codec source ZIP](https://github.com/mohamadrezamakanani-dotcom/nova-flux/releases/download/v2.3.1/Nova-Flux-2.3.1-FFmpeg-sources.zip) · [Validation record](VALIDATION.md)
 
-## Conversion
+### Start in three steps
 
-Add files, drop them onto the window, or add a folder. Choose an output format and destination, then start the queue. Cancel individual items or the batch, retry a failed item, reveal an output in the file manager, or clear completed items. **Output settings** opens and closes the **Your output** panel.
+1. Extract the **whole archive**. Keep its runtime and license folders together. Source ZIPs are for developers, not installers.
+2. Open **Nova Flux.app** on macOS, **nova-flux.exe** on Windows, or **nova-flux** on Linux. No Rust, FFmpeg installation, account or codec download is required by the packaged app.
+3. Add files, choose a format and output folder, then select **Start converting**. Enable **Target file size** to set a maximum in decimal MB.
 
-Video output: MP4, MKV, AVI, MOV and WebM. Audio output: MP3, WAV, AAC, OGG, M4A and FLAC. The selected streams are the first non-artwork video and first audio stream; subtitles, artwork and alternate audio are outside this selected-stream contract. Broken files report their own errors. Folder scanning is bounded and does not follow symbolic links. Originals and existing output files are not overwritten. Closing the app cancels active work; queue history is session-only.
+macOS is ad-hoc signed and **not Apple-notarized**; Windows executables are **unsigned**, so OS warnings may appear. Linux needs compatible desktop libraries, graphics drivers and an XDG portal for dialogs. The Linux codec baseline is Ubuntu 22.04 glibc. Intel Macs and Windows/Linux ARM packages are not provided. See [platform scope](docs/CROSS_PLATFORM.md) and [troubleshooting](SUPPORT.md).
 
-## Source-aware compression
+## What it does
 
-For video, the quality cards choose distinct **maximum sizes relative to each source file**:
+![Native Nova Flux interface on macOS](assets/screenshots/macos.png)
 
-| Preset | Maximum output size |
-| --- | --- |
-| Compact | 40% of source bytes |
-| Balanced | 65% of source bytes |
-| High quality | 85% of source bytes |
+- **Local processing:** no uploads, cloud account, telemetry or runtime downloads.
+- **Video:** MP4, MKV, AVI, MOV and WebM. **Audio:** MP3, WAV, AAC, OGG, M4A and FLAC.
+- **Verified compression:** Compact, Balanced and High quality set maximums of **40%, 65% and 85% of source bytes**. Explicit size targets override these presets. Actual bytes are verified before saving.
+- **Original geometry:** no resizing, padding, frame-rate reduction or shortening of the selected streams. Impossible limits fail clearly without saving an oversized output.
+- **Batch workflow:** add files/folders, drag and drop, cancel, retry and reveal outputs. Original files and existing outputs are not overwritten.
+- **Adaptive work:** CPU/RAM-aware scheduling; compatible Apple hardware is measured against CPU encoding. Windows/Linux currently use CPU codecs.
 
-These percentages are deliberate size goals, not perceptual-quality scores or fabricated predictions. The interface labels them as maximums. Smaller presets can reduce visible quality and audio fidelity; retaining dimensions does not retain original quality. CPU encoding uses two-pass bitrate allocation; compatible hardware encoding uses measured feedback and software fallback. The completed file is measured before publication and must fit the applied maximum. Exact output bytes and reduction are displayed afterwards. A very small or already minimal source may not fit a requested preset; that fails clearly and publishes no oversized or resized file.
+The UI is native English Rust with egui/eframe/wgpu. FFmpeg/ffprobe are separate native media tools. There is no WebView or JavaScript UI. Selected streams are the first non-artwork video and first audio; alternate audio/subtitles are outside the current contract. Lossy compression can reduce visible and audio quality; retaining dimensions does not retain original quality.
 
-**Video dimensions are locked to Original.** Compression does not resize, pad, lower frame rate or shorten the selected streams. Orientation and pixel aspect ratio are verified where known. Unsupported geometry/rotation combinations fail clearly rather than silently changing the image. Old saved resize settings reset to Original.
+[Full user guide](docs/USER_GUIDE.md) · [Build from source](docs/BUILDING.md)
 
-**Stream copy** remuxes compatible selected streams without re-encoding. Its size is measured through one complete private copy, with no seek, trim or extrapolation. It requires temporary disk space and has a cancellable 15-second measurement deadline. A failed measurement shows Unavailable with the reason. Container compatibility still applies.
+## See it on each platform
 
-Audio size estimates use real local encodes with the production profile. Longer re-encodes sample three timeline positions; short sources are measured whole. Sample extrapolation is approximate, and the tooltip records the measurement method. Missing measurements never become invented numbers or partial batch totals. WAV preserves decoded PCM precision; FLAC uses integer lossless compression and cannot recover quality already lost in a compressed source. These lossless formats can be larger than the input.
+<details>
+<summary>Windows and Linux native screenshots</summary>
 
-Input sizes use decimal MB: **1 MB = 1,000,000 bytes**. Exact source/output bytes are also displayed, and MiB is distinguished in the input tooltip. Changed queued sources invalidate their metadata and measurements; sources are checked again before conversion and publication.
+**Windows — DX12/WARP native CI capture**
 
-## Exact size maximum
+![Nova Flux on Windows](assets/screenshots/windows.png)
 
-Enable **Target file size** to drag the logarithmic slider or enter a per-output maximum in decimal MB. This explicit maximum overrides the source-relative presets. Quality is calculated automatically; the same cap is not repeated as a pretend prediction under every quality option.
+**Linux — X11/Vulkan native CI capture**
 
-A successful output is at or below its maximum. The app does not pad it to an exact byte count. Original dimensions, cadence and full selected duration remain fixed. If the codec cannot fit, no output is saved. WAV, FLAC and Stream copy do not offer a lossy target-size mode.
+![Nova Flux on Linux](assets/screenshots/linux.png)
 
-## Performance
+</details>
 
-Automatic mode budgets worker count and CPU threads against the workload, processor count and available memory. On supported Apple encoders it compares real short CPU and hardware trials, caches the measured choice and falls back to software where needed. Other platforms currently use compatible software encoding; no untested universal GPU acceleration is claimed. RAM is used for media work, rather than allocated merely to increase its usage number.
+## What has been verified
 
-Exact size control has a cost: CPU video uses two passes. Automatic tuning compares implemented paths; it is not proof of the fastest possible algorithm on every future device. Measurements and source probes are cancellable and stay away from the drawing thread.
+| Published package | Native Rust tests | Final extracted package |
+| --- | --- | --- |
+| macOS arm64 | 100 passed | Bundled diagnosis and actual Metal rendering passed |
+| Windows x64 | 78 passed | Bundled diagnosis and actual DX12/WARP rendering passed |
+| Linux x64 | 100 passed | Bundled diagnosis and actual X11/Vulkan rendering passed |
 
-## Build and validate
+Each runtime also passed 12 actual encode/probe/decode checks. The installed Mac app was used for a real 500,000-byte target conversion: **486,199 output bytes**, retaining **1920×1080, 30 fps and all 90 frames**. These results apply to the recorded hosts/revisions; manual physical Windows/Linux desktop acceptance remains unverified.
 
-Release builds use Rust **1.99.0** and locked Cargo dependencies. CI uses Python **3.12**; release helpers require Python 3.11 or newer. Windows needs the MSVC build tools; Linux needs its desktop/window-system development libraries and a working WGPU adapter. The [matched-runtime workflow](.github/workflows/matched-runtime.yml) records concrete dependencies and commands.
+The **Source validation** badge refers to the public source/media/UI workflow. It is separate from the [matched-runtime package evidence](docs/evidence/matched-2.3.1.json). [Validation details](VALIDATION.md) · [Manual acceptance matrix](docs/MANUAL_ACCEPTANCE.md) · [Public package-build workflow](docs/PUBLIC_RELEASE_BUILD.md)
 
-This source repository **does not contain the third-party media runtime binaries**. Put compatible FFmpeg/ffprobe under `runtime/bin/` for a Windows/Linux portable package, or pass an absolute runtime directory through `NOVA_RUNTIME` for development. Windows uses `ffmpeg.exe` and `ffprobe.exe`. A macOS `.app` uses `Contents/Resources/runtime/`.
+## Help and contribute
 
-```sh
-cargo test --locked --no-default-features
-cargo build --release --locked
-NOVA_RUNTIME=/absolute/path/to/runtime target/release/nova-flux --diagnose
-```
+[Get help](SUPPORT.md) · [Report a bug](https://github.com/mohamadrezamakanani-dotcom/nova-flux/issues/new?template=bug_report.yml) · [Suggest a feature](https://github.com/mohamadrezamakanani-dotcom/nova-flux/issues/new?template=feature_request.yml) · [Contribute](CONTRIBUTING.md) · [Security reports](SECURITY.md)
 
-For a Windows development build in PowerShell (with compatible tools already in `runtime/bin/`):
+[Changes](CHANGELOG.md) · [Roadmap](docs/ROADMAP.md) · [Community guidelines](CODE_OF_CONDUCT.md)
 
-```powershell
-$env:NOVA_RUNTIME = (Resolve-Path .\runtime).Path
-cargo build --release --locked
-.\target\release\nova-flux.exe --diagnose
-.\target\release\nova-flux.exe
-```
+## Licenses and source
 
-For real media tests, set `NOVA_TEST_RUNTIME` to an absolute compatible runtime directory and run:
+Nova Flux application code is [MIT licensed](LICENSE). FFmpeg and codec dependencies retain their own terms; this runtime is GPL-3.0-or-later, without nonfree components. All nine exact original codec source archives, build instructions and component notices are inside every application package. Matching codec sources are also a separate release download. Target-selected Rust, embedded-font and Rust standard-library notices are included. **About & licenses** opens the bundled notices.
 
-```sh
-cargo test --locked -- --include-ignored --test-threads=1
-cargo clippy --all-targets --locked -- -D warnings
-python -B -m unittest scripts/test_portable_packaging.py -v
-```
-
-The application supports an isolated native rendering test with `--smoke-test`, `NOVA_DATA_DIR`, `NOVA_CACHE_DIR` and `NOVA_SMOKE_SCREENSHOT`. That test creates a native WGPU window, receives an actual rendered screenshot and closes gracefully. It is narrower than manual user interaction on physical computers.
-
-## Matched codec sources and release packages
-
-Version 2.3.1 replaces the older provider runtimes with our own native FFmpeg **8.1.3** builds. Nine exact original archives cover FFmpeg, x264, LAME, libogg, libvorbis, Opus, libvpx, dav1d and zlib. Hashes, original license texts, build instructions, flags and tool versions are retained. External library autodetection and media networking are disabled; required codec libraries are linked statically, with native system imports inspected. No nonfree components are enabled.
-
-Each verified application package contains the complete codec source archives and recipe under its runtime directory, the application MIT license, exact Rust/font notices and Rust standard-library notices. The separate `Nova-Flux-2.3.1-FFmpeg-sources.zip` is published alongside corresponding binaries; its hash and download URL are embedded in each package. See [source preparation](scripts/runtime-source/SOURCE_BUNDLE.md), [native runtime build](scripts/runtime-source/BUILD.md), [notice collection](docs/RUST_NOTICES.md), and [verified packaging](docs/VERIFIED_PACKAGING.md).
-
-To rebuild the media tools, follow the exact native recipe. Windows uses **MSYS2 UCRT64** GCC, Make, **Perl**, diffutils, CMake, Meson, Ninja, pkgconf and NASM; Rust application builds use the separate native MSVC environment. Install Rust 1.99.0 `rustfmt`, `clippy` and **`rust-docs`** for release notice collection. Windows distribution builds use `-C target-feature=+crt-static`. The collector and packager reject incomplete or stale source/notice inventories.
-
-The [2.3.1 validation record](VALIDATION.md) identifies actual native test/build revisions and package acceptance. Older provider-based private packages and the [2.3.0 source preview](https://github.com/mohamadrezamakanani-dotcom/nova-flux/releases/tag/v2.3.0) are historical evidence. They are not the matched 2.3.1 distributions. macOS packages are ad-hoc signed and **not Apple-notarized**; Windows packages are **not code-signed**. These checks do not certify legal compliance, visual quality or compatibility with every device.
-
-## License
-
-Nova Flux application source is [MIT licensed](LICENSE). Third-party dependencies, system fonts and FFmpeg keep their own licenses; MIT does not relicense them. See [third-party and asset notices](THIRD_PARTY.md).
+[Third-party notices](THIRD_PARTY.md) · [Rust/font notice collection](docs/RUST_NOTICES.md) · [Verified packaging](docs/VERIFIED_PACKAGING.md)

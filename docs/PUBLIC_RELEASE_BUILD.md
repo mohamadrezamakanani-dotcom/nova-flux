@@ -29,6 +29,8 @@ gh workflow run public-matched-validation.yml --ref main
 Use the Actions page to find the resulting run and download its artifacts
 before their one-day retention period expires. Dispatching from a fork uses
 that fork's workflow and source; it does not affect the upstream release.
+For another attempt of the same run, use **Re-run all jobs** so all three
+receipts and the common source artifact share the new attempt number.
 
 ## Native hosts and checks
 
@@ -85,19 +87,30 @@ The version comes from `Cargo.toml`; archive names contain that version:
 | `matched-package-<platform>-<attempt>` | One final `Nova-Flux-<version>-<platform>.zip` or Linux `.tar.gz`, plus its `.sha256` file |
 | `matched-evidence-<platform>-<attempt>` | Allowlisted `validation.json`, `receipt.json`, and completed native/extracted GUI PNGs |
 | `matched-common-sources-<attempt>` | One `Nova-Flux-<version>-FFmpeg-sources.zip` and its `.sha256` file, uploaded by Linux only |
+| `matched-summary-<attempt>` | Combined cross-platform `report.json` and `SHA256SUMS` for the three application archives and common source ZIP |
 
 Each application archive already includes the original corresponding media
 sources and notices. The separate source ZIP provides the common source
 download. It is created independently on each host without platform build
 manifests, so its bytes must match across platforms.
 
-Before treating a run as complete, confirm **all three jobs succeed**, every
-receipt has `status: PASS`, and the three `source_bundle.sha256` values match
-the downloaded common source ZIP. Each receipt also records the source-set ID,
-frozen builder and lock hashes, final archive hash and size, package-manifest
-hash, test counts and GUI image hashes. An incomplete or failed job cannot
-upload an accepted final package. A partial evidence artifact may still be
-available to show which checks ran.
+After all three native jobs succeed, a final aggregation job downloads this
+run's three exact evidence artifacts and the common source ZIP. It checks three
+unique successful platforms, the current source commit and Cargo version,
+nonempty passing test runs with no failures or ignored tests, identical source
+ZIP hashes/sizes, and the checked-out frozen builder, source lock and source-set
+identity. It independently hashes the downloaded common source ZIP. A mismatch
+fails the workflow instead of leaving source comparison as a manual step.
+
+Before treating a run as complete, confirm **all three native jobs and the
+aggregation job succeed**, then download `matched-summary-<attempt>` and check
+the final application archives against its `SHA256SUMS`. The aggregation job
+records native-job archive hashes; it does not download or re-hash application
+packages. Their byte, inventory, diagnosis and rendered GUI checks were
+performed upstream on each native host. Each native receipt also records the
+package-manifest hash, test counts and GUI image hashes. An incomplete or
+failed native job cannot upload an accepted final package. A partial evidence
+artifact may still be available to show which checks ran.
 
 The allowlisted summaries omit command arguments, absolute host paths, full
 diagnosis payloads and raw error/log text. The workflow uploads no raw runtime

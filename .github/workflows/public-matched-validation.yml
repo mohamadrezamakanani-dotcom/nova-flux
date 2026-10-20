@@ -203,3 +203,51 @@ jobs:
           path: |
             ${{ env.SOURCE_ARCHIVE }}
             ${{ env.SOURCE_ARCHIVE }}.sha256
+
+  aggregate:
+    name: Verify common sources across all native receipts
+    needs: native
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - name: Download this run's exact native evidence and one common source ZIP
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CURRENT_RUN: ${{ github.run_id }}
+          CURRENT_ATTEMPT: ${{ github.run_attempt }}
+          CURRENT_REPOSITORY: ${{ github.repository }}
+        run: |
+          for platform in macos-arm64 windows-x86_64 linux-x86_64; do
+            gh run download "$CURRENT_RUN" --repo "$CURRENT_REPOSITORY" --name "matched-evidence-${platform}-${CURRENT_ATTEMPT}" --dir "aggregate-inputs/$platform"
+          done
+          gh run download "$CURRENT_RUN" --repo "$CURRENT_REPOSITORY" --name "matched-common-sources-${CURRENT_ATTEMPT}" --dir aggregate-inputs/common
+      - name: Verify the common ZIP bytes and all three native source bindings
+        shell: python
+        run: |
+          import os, subprocess, sys
+          from pathlib import Path
+          sources = list(Path('aggregate-inputs/common').glob('*.zip'))
+          assert len(sources) == 1, 'Expected exactly one common source ZIP'
+          command = [sys.executable, 'scripts/aggregate_public_release.py', '--source-bundle', str(sources[0]), '--output', 'aggregate-evidence', '--expected-commit', os.environ['GITHUB_SHA']]
+          for platform in ('macos-arm64', 'windows-x86_64', 'linux-x86_64'):
+              command.extend(['--receipt', f'aggregate-inputs/{platform}/receipt.json'])
+          subprocess.run(command, check=True)
+      - name: Upload cross-platform acceptance summary and archive checksums
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: matched-summary-${{ github.run_attempt }}
+          retention-days: 1
+          if-no-files-found: error
+          path: |
+            aggregate-evidence/report.json
+            aggregate-evidence/SHA256SUMS

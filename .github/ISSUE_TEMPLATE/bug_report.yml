@@ -1,0 +1,78 @@
+name: Bug report
+description: Report a reproducible application, conversion, or packaging problem.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This report is public. Do not attach private media, credentials, personal paths, or complete raw build/environment logs. Use generated samples and sanitized excerpts.
+        Suspected vulnerability? Use [private security reporting](https://github.com/mohamadrezamakanani-dotcom/nova-flux/security/advisories/new) instead.
+        Check the [support guide](https://github.com/mohamadrezamakanani-dotcom/nova-flux/blob/main/SUPPORT.md) and search existing issues first.
+  - type: input
+    id: version
+    attributes:
+      label: Application version and package
+      description: Include the release asset filename, or source commit and build method.
+      placeholder: 2.3.1, Nova-Flux-2.3.1-linux-x86_64.tar.gz
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options:
+        - macOS arm64
+        - Windows x86_64
+        - Linux x86_64
+        - Other or source build (describe below)
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: OS version, architecture, and desktop environment
+      description: For rendering issues include GPU/driver. State physical desktop, VM, remote session, or CI; on Linux include desktop/portal if known.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Provide numbered steps, including import method, destination, output format, preset or target bytes, and performance mode. Explain if a generated sample reproduces it.
+      placeholder: |
+        1. Import a generated sample using the native picker.
+        2. Select MP4 and a 500,000-byte maximum.
+        3. Start conversion and observe...
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected and actual result
+      description: Include exact error text and whether it happens every time. Sanitize filenames and personal paths.
+    validations:
+      required: true
+  - type: textarea
+    id: media
+    attributes:
+      label: Media details, if relevant
+      description: Input/output formats and codecs, dimensions, frame rate, duration, exact source/output bytes, and applied maximum. 1 MB is 1,000,000 bytes. Do not upload private media.
+    validations:
+      required: false
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Sanitized diagnostics or captures
+      description: Optional relevant --diagnose output, small error excerpt, or cropped screenshot. For source builds include Rust/runtime versions and command exit status. Review for secrets and personal data first.
+      render: text
+    validations:
+      required: false
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and reviewed the support guide.
+          required: true
+        - label: I removed private media, personal paths, secrets, and raw environment dumps; this is not a private vulnerability report.
+          required: true

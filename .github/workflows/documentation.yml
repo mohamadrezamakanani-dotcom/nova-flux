@@ -1,0 +1,30 @@
+name: Documentation and community files
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, 'codex/**']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  docs:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.12'
+      - name: Check project Markdown links and assets
+        run: python scripts/check_docs.py
+      - name: Check documentation checker boundaries
+        run: python -B -m unittest discover -s scripts -p test_docs.py -v
+      - name: Parse issue forms and chooser safely
+        run: ruby -ryaml -e 'ARGV.each { |f| YAML.safe_load(File.read(f), aliases:false); puts "PASS #{f}" }' .github/ISSUE_TEMPLATE/*.yml
+      - name: Check whitespace
+        run: git diff --check HEAD
