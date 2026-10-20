@@ -231,6 +231,43 @@ def verify_privacy(tree, private_tokens=None):
             raise ValueError(f"Public package contains a private local path: {record['path']}; rebuild/remap paths, do not redact upstream notices")
 
 
+def normalize_generated_provenance(runtime, mappings):
+    """Remove host paths from generated logs only; preserve every build input/binary."""
+    changes = []
+    for path in sorted((runtime / "provenance").rglob("*.log")):
+        before = path.read_bytes()
+        after = before
+        for original, replacement in mappings:
+            for form in {original, original.replace("\\", "/"), original.replace("\\", "\\\\")}:
+                if form:
+                    after = after.replace(form.encode(), replacement.encode())
+        if after != before:
+            path.write_bytes(after)
+            changes.append({"path": path.relative_to(runtime).as_posix(), "original_sha256": hashlib.sha256(before).hexdigest(), "packaged_sha256": digest(path)})
+    if changes:
+        manifest_path = runtime / "manifest.json"
+        value = json.loads(manifest_path.read_text())
+        value["packaging_provenance"] = {"operation": "Normalize host paths in generated build logs only; binaries, commands, source archives, recipes and original notices are unchanged", "original_runtime_manifest_sha256": digest(manifest_path), "changed_logs": changes}
+        value["files"] = inventory(runtime, exclude=("manifest.json",))
+        manifest_path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return changes
+
+
+def package_notice(version, platform, license_path, runtime_path, source_url, source_sha):
+    return (f"Nova Flux {version} — {platform}\n"
+            + "Paths below are relative to the extracted top-level application folder.\n"
+            + f"Nova's application code is MIT licensed; see {license_path}/application-LICENSE.txt.\n"
+            + f"Original Rust and embedded font notices are in {license_path}/rust/.\n"
+            + "The separate FFmpeg/ffprobe runtime is GPL version 3 or later.\n"
+            + "Its complete original codec sources and exact build instructions are\n"
+            + f"included in {runtime_path}/source/; dependency notices are in {runtime_path}/licenses/.\n"
+            + f"The separately published complete corresponding-source ZIP is:\n{source_url}\nSHA-256: {source_sha}\n"
+            + "Keep the complete application folder when extracting.\n"
+            + ("This macOS app has a local ad-hoc signature and is not notarized by Apple.\n" if platform == "macos-arm64" else "")
+            + ("This Windows executable is not code-signed.\n" if platform == "windows-x86_64" else "")
+            + "Native package diagnosis does not establish GUI/GPU behavior on every OS.\n")
+
+
 def diagnose(executable, version):
     environment = os.environ.copy()
     environment.pop("NOVA_RUNTIME", None)
@@ -355,18 +392,10 @@ def package(platform, runtime, notices, binary, source_zip, destination, root=RO
         shutil.copy2(binary, executable)
         executable.chmod(0o755)
         shutil.copytree(runtime, staged_runtime)
+        normalize_generated_provenance(staged_runtime, [(str(ROOT), "{SOURCE}"), (str(Path.home()), "{HOME}")])
         shutil.copytree(notices, licenses / "rust")
         shutil.copyfile(root / "LICENSE", licenses / "application-LICENSE.txt")
-        notice_text = (f"Nova Flux {version} — {platform}\n"
-                       + "Nova's application code is MIT licensed; see application-LICENSE.txt.\n"
-                       + "Original Rust and embedded font notices are in rust/.\n"
-                       + "The separate FFmpeg/ffprobe runtime is GPL version 3 or later.\n"
-                       + "Its complete original codec sources and exact build instructions are\n"
-                       + "included inside runtime/source/; dependency notices are in runtime/licenses/.\n"
-                       + f"The separately published complete corresponding-source ZIP is:\n{source_url}\nSHA-256: {source_sha}\n"
-                       + "Keep the complete application folder when extracting.\n"
-                       + ("This macOS app has a local ad-hoc signature and is not notarized by Apple.\n" if platform == "macos-arm64" else "")
-                       + "Native package diagnosis does not establish GUI/GPU behavior on every OS.\n")
+        notice_text = package_notice(version, platform, licenses.relative_to(stage).as_posix(), staged_runtime.relative_to(stage).as_posix(), source_url, source_sha)
         (licenses / "README.txt").write_text(notice_text)
         (stage / "README.txt").write_text(notice_text)
         if platform == "macos-arm64":

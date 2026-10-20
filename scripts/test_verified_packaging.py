@@ -136,6 +136,29 @@ class VerifiedPackagingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "private local path"):
             package.verify_privacy(tree, private_tokens=[b"/Users/private-user"])
 
+    def test_generated_windows_log_normalization_preserves_inputs_and_records_change(self):
+        runtime = self.root / "runtime"
+        original = b"USERPROFILE='C:\\Users\\runneradmin'\nCFLAGS=-O2\n"
+        self.write("runtime/provenance/configuration/ffmpeg/ffbuild/config.log", original)
+        binary = self.write("runtime/bin/ffmpeg.exe", b"binary bytes")
+        notice = self.write("runtime/licenses/LICENSE", b"Original author C:\\Users\\runneradmin")
+        value = {"schema_version": 1, "files": package.inventory(runtime)}
+        self.write("runtime/manifest.json", json.dumps(value).encode())
+        changes = package.normalize_generated_provenance(runtime, [(r"C:\Users\runneradmin", "{HOME}")])
+        self.assertEqual(len(changes), 1)
+        self.assertEqual(changes[0]["original_sha256"], hashlib.sha256(original).hexdigest())
+        self.assertEqual(binary.read_bytes(), b"binary bytes")
+        self.assertEqual(notice.read_bytes(), b"Original author C:\\Users\\runneradmin")
+        updated = json.loads((runtime / "manifest.json").read_text())
+        package.verify_records(runtime, updated["files"], exclude=("manifest.json",))
+        self.assertEqual((runtime / changes[0]["path"]).read_bytes(), b"USERPROFILE='{HOME}'\nCFLAGS=-O2\n")
+
+    def test_package_notice_uses_actual_mac_bundle_paths(self):
+        text = package.package_notice("2.3.1", "macos-arm64", "Nova Flux.app/Contents/Resources/licenses", "Nova Flux.app/Contents/Resources/runtime", "https://example.org/source.zip", "a" * 64)
+        self.assertIn("Nova Flux.app/Contents/Resources/licenses/application-LICENSE.txt", text)
+        self.assertIn("Nova Flux.app/Contents/Resources/runtime/source/", text)
+        self.assertIn("relative to the extracted top-level", text)
+
 
 if __name__ == "__main__":
     unittest.main()

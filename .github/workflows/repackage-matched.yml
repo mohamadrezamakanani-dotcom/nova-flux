@@ -1,0 +1,105 @@
+name: Verify final matched release packages
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['codex/final-runtime-packages']
+    paths: ['scripts/package_verified.py', 'scripts/test_verified_packaging.py', '.github/workflows/repackage-matched.yml']
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  package:
+    if: github.event.repository.private == true
+    name: Final ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-2022
+            platform: windows-x86_64
+            accepted_run: '39472802531'
+            accepted_commit: 83dc3c6f798b1e030c56f781986ed9cd9fe4f74b
+          - os: ubuntu-22.04
+            platform: linux-x86_64
+            accepted_run: '39470592443'
+            accepted_commit: 25529569e1c6d6d24c6979d50fe7e6f97601b046
+    env:
+      ACCEPTED_RUN: ${{ matrix.accepted_run }}
+      ACCEPTED_COMMIT: ${{ matrix.accepted_commit }}
+      PLATFORM: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.12'
+      - name: Install Windows native inspection tool
+        if: runner.os == 'Windows'
+        uses: msys2/setup-msys2@ec48f7c5447b3140e2b088413ae3a55687bccb6e
+        with:
+          msystem: UCRT64
+          install: mingw-w64-ucrt-x86_64-binutils
+      - name: Install Linux desktop acceptance dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxkbcommon-x11-0 libvulkan1 mesa-vulkan-drivers xvfb xauth xdg-utils
+      - name: Retrieve exact accepted native build
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh run download "$ACCEPTED_RUN" --repo "$GITHUB_REPOSITORY" -n "matched-$PLATFORM-1" -D accepted-inputs
+      - name: Check original native acceptance and common source archive
+        shell: python
+        run: |
+          import hashlib,json,os
+          from pathlib import Path
+          base=Path('accepted-inputs')
+          report=json.loads((base/'validation'/os.environ['PLATFORM']/'report.json').read_text())
+          assert report['status']=='PASS' and report['app_version']=='2.3.1'
+          assert report['commit']==os.environ['ACCEPTED_COMMIT']
+          assert report['tests']['failed']==0 and report['tests']['ignored']==0
+          source=base/'dist/Nova-Flux-2.3.1-FFmpeg-sources.zip'
+          assert hashlib.sha256(source.read_bytes()).hexdigest()=='2d455cac22950eabcadbd23f8e30a147d887516403c51821b1af766d80ca05f5'
+          print(json.dumps({'original_native_acceptance':report['status'],'tests':report['tests'],'source_integrity':'PASS'}))
+      - name: Check packaging boundaries
+        run: python -B -m unittest discover -s scripts -p test_verified_packaging.py -v
+      - name: Assemble final native package
+        shell: bash
+        run: |
+          suffix=''
+          if [ "$PLATFORM" = windows-x86_64 ]; then suffix='.exe'; fi
+          python scripts/package_verified.py --platform "$PLATFORM" --runtime accepted-inputs/runtime --notices accepted-inputs/binary-notices --binary "accepted-inputs/target/release/nova-flux$suffix" --source-bundle accepted-inputs/dist/Nova-Flux-2.3.1-FFmpeg-sources.zip --destination final-packages
+      - name: Verify extracted Windows package and actual rendering
+        if: runner.os == 'Windows'
+        env:
+          WGPU_BACKEND: dx12
+          NOVA_WGPU_FORCE_FALLBACK: '1'
+        run: python scripts/check_verified_package.py --platform windows-x86_64 --archive final-packages/Nova-Flux-2.3.1-windows-x86_64.zip --report-dir final-validation
+      - name: Verify extracted Linux package and actual rendering
+        if: runner.os == 'Linux'
+        env:
+          WGPU_BACKEND: vulkan
+          LIBGL_ALWAYS_SOFTWARE: '1'
+          VK_ICD_FILENAMES: /usr/share/vulkan/icd.d/lvp_icd.x86_64.json
+        run: xvfb-run -a -s '-screen 0 1440x1000x24' python scripts/check_verified_package.py --platform linux-x86_64 --archive final-packages/Nova-Flux-2.3.1-linux-x86_64.tar.gz --report-dir final-validation
+      - name: Retain final packages and evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: final-${{ matrix.platform }}
+          retention-days: 3
+          include-hidden-files: true
+          path: |
+            final-packages/*.zip
+            final-packages/*.tar.gz
+            final-packages/*.sha256
+            final-validation/
+            accepted-inputs/validation/${{ matrix.platform }}/report.json
+            accepted-inputs/validation/${{ matrix.platform }}/native-smoke.png
