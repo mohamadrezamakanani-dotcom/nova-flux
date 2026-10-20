@@ -2,14 +2,23 @@ name: Matched source runtime validation
 
 on:
   workflow_dispatch:
+    inputs:
+      platform:
+        description: Native platform to validate
+        type: choice
+        required: true
+        default: all
+        options: [all, windows-x86_64, linux-x86_64]
   push:
     branches: ['codex/runtime-source-release']
+    # Workflow/documentation fixes can be dispatched for one affected host.
+    paths: ['Cargo.*', 'src/**', 'tests/**', 'assets/**', 'scripts/**']
 
 permissions:
   contents: read
 
 concurrency:
-  group: matched-runtime-${{ github.ref }}
+  group: matched-runtime-${{ github.ref }}-${{ inputs.platform || 'all' }}
   cancel-in-progress: true
 
 jobs:
@@ -21,13 +30,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - os: windows-2022
-            platform: windows-x86_64
-            rust_target: x86_64-pc-windows-msvc
-          - os: ubuntu-22.04
-            platform: linux-x86_64
-            rust_target: x86_64-unknown-linux-gnu
+        include: ${{ fromJSON(inputs.platform == 'windows-x86_64' && '[{"os":"windows-2022","platform":"windows-x86_64","rust_target":"x86_64-pc-windows-msvc"}]' || inputs.platform == 'linux-x86_64' && '[{"os":"ubuntu-22.04","platform":"linux-x86_64","rust_target":"x86_64-unknown-linux-gnu"}]' || '[{"os":"windows-2022","platform":"windows-x86_64","rust_target":"x86_64-pc-windows-msvc"},{"os":"ubuntu-22.04","platform":"linux-x86_64","rust_target":"x86_64-unknown-linux-gnu"}]') }}
     env:
       CARGO_BUILD_JOBS: '2'
       CARGO_TERM_COLOR: never
@@ -68,6 +71,7 @@ jobs:
           install: >-
             make
             diffutils
+            perl
             mingw-w64-ucrt-x86_64-gcc
             mingw-w64-ucrt-x86_64-python
             mingw-w64-ucrt-x86_64-cmake
