@@ -67,6 +67,10 @@ def write_json(path: Path, value: object) -> None:
     path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
+def filter_names(output: str) -> set[str]:
+    return set(re.findall(r"^\s*[TSC.]{2,3}\s+(\S+)", output, re.M))
+
+
 def require_host(target: str) -> None:
     expected = {"macos-arm64": ("Darwin", {"arm64", "aarch64"}),
                 "linux-x86_64": ("Linux", {"x86_64", "amd64"}),
@@ -493,9 +497,9 @@ class Builder:
         if REQUIRED_ENCODERS - available:
             raise ValueError(f"Missing required encoders: {sorted(REQUIRED_ENCODERS - available)}")
         filters = self.runtime_run("ffmpeg", ["-hide_banner", "-filters"])
-        filter_names = set(re.findall(r"^\s*[TSC.]{3}\s+(\S+)", filters, re.M))
-        if REQUIRED_FILTERS - filter_names:
-            raise ValueError(f"Missing required filters: {sorted(REQUIRED_FILTERS - filter_names)}")
+        available_filters = filter_names(filters)
+        if REQUIRED_FILTERS - available_filters:
+            raise ValueError(f"Missing required filters: {sorted(REQUIRED_FILTERS - available_filters)}")
         decoders = self.runtime_run("ffmpeg", ["-hide_banner", "-decoders"])
         if not re.search(r"^\s*V[A-Z.]{5}\s+libdav1d\s", decoders, re.M):
             raise ValueError("Pinned libdav1d AV1 decoder is unavailable")
@@ -705,6 +709,12 @@ def self_test() -> None:
     import unittest
 
     class BuildContractTests(unittest.TestCase):
+        def test_current_and_legacy_filter_flag_columns(self):
+            # Captured FFmpeg 8.1.3 output has two capability columns. Older
+            # releases printed three. Neither format may hide real filters.
+            output = "Filters:\n .. aresample A->A Resample audio.\n .. scale V->V Scale video.\n TSC legacy V->V Older listing.\n"
+            self.assertEqual(filter_names(output), {"aresample", "scale", "legacy"})
+
         def test_mac_vpx_target_selects_desktop_sdk(self):
             # Upstream dispatches arm*-darwin-* to iOS and versioned
             # *-darwin2[0-5]-* to the desktop macOS SDK.

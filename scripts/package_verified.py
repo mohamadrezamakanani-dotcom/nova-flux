@@ -198,7 +198,7 @@ def application_imports(binary, platform):
         objdump = shutil.which("objdump") or "C:/msys64/ucrt64/bin/objdump.exe"
         output = subprocess.check_output([objdump, "-p", str(binary)], text=True)
         imports = re.findall(r"^\s*DLL Name:\s*(\S+)", output, re.M)
-        extra = {"d3dcompiler_47.dll", "imm32.dll", "comdlg32.dll", "comctl32.dll", "dwmapi.dll", "hid.dll", "opengl32.dll", "rpcrt4.dll", "uxtheme.dll", "winspool.drv", "wsock32.dll", "cfgmgr32.dll", "propsys.dll", "shcore.dll", "uiautomationcore.dll", "powrprof.dll"}
+        extra = {"d3dcompiler_47.dll", "imm32.dll", "comdlg32.dll", "comctl32.dll", "dwmapi.dll", "hid.dll", "opengl32.dll", "rpcrt4.dll", "uxtheme.dll", "winspool.drv", "wsock32.dll", "cfgmgr32.dll", "propsys.dll", "shcore.dll", "uiautomationcore.dll", "powrprof.dll", "combase.dll", "bcryptprimitives.dll"}
         approved = lambda item: builder.allowed_dependency(item, platform) or item.lower() in extra
     if not imports or any(not approved(item) for item in imports):
         raise ValueError(f"Application imports unapproved external/system libraries: {imports}")
