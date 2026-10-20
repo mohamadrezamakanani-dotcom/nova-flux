@@ -1007,7 +1007,7 @@ impl Desktop {
                 let label = if self.processing() {
                     "Converting…"
                 } else {
-                    "Start converting  →"
+                    "Start converting"
                 };
                 let response = ui.add_enabled(
                     enabled,
@@ -1439,7 +1439,7 @@ impl Desktop {
         ui.separator();
         ui.horizontal(|ui| {
             ui.label(
-                RichText::new("●  Processed on this device")
+                RichText::new("Processed on this device")
                     .size(10.0)
                     .color(self.muted()),
             );

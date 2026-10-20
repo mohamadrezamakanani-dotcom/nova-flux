@@ -2,6 +2,8 @@
 
 A local media converter with a native English interface written in Rust. Convert media on your own device, choose a verified size maximum, and keep original video dimensions and frame cadence.
 
+![Native Nova Flux interface](assets/screenshots/macos.png)
+
 The UI, queue, settings, compression planning, resource scheduling and process control use Rust with egui/eframe/wgpu. FFmpeg and ffprobe are separate native codec tools. The application has no WebView, JavaScript UI, uploads, cloud account or runtime download.
 
 ## Platform status
@@ -10,9 +12,9 @@ Rust supports many targets, but each operating system and processor requires its
 
 | Platform | Target | Status |
 | --- | --- | --- |
-| macOS / Apple Silicon | arm64 | 2.2 tested locally; 2.3 integration in progress |
-| Windows | x86_64 | Native build, codec and GUI validation in progress |
-| Linux | x86_64 | Native build, codec and GUI validation in progress |
+| macOS / Apple Silicon | arm64 | 2.3 tested locally: 100 tests, native Metal window and actual UI conversion |
+| Windows | x86_64 | 2.3 native CI: 78 tests, DX12/WARP rendering and packaged launch |
+| Linux | x86_64 | 2.3 native CI: 100 tests, X11/Vulkan rendering and packaged launch |
 
 This does not promise support for every Linux distribution, Windows version, processor, physical GPU, Android or iOS. See [cross-platform validation](docs/CROSS_PLATFORM.md) for actual OS/runner evidence. Versioned [validation records](VALIDATION.md) distinguish local acceptance, native CI and untested behavior.
 
@@ -64,6 +66,15 @@ This source repository **does not contain the third-party media runtime binaries
 cargo test --locked --no-default-features
 cargo build --release --locked
 NOVA_RUNTIME=/absolute/path/to/runtime target/release/nova-flux --diagnose
+```
+
+For a Windows development build in PowerShell (with compatible tools already in `runtime/bin/`):
+
+```powershell
+$env:NOVA_RUNTIME = (Resolve-Path .\runtime).Path
+cargo build --release --locked
+.\target\release\nova-flux.exe --diagnose
+.\target\release\nova-flux.exe
 ```
 
 For real media tests, set `NOVA_TEST_RUNTIME` to an absolute compatible runtime directory and run:

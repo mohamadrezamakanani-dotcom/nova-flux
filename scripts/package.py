@@ -25,7 +25,7 @@ plist = {
  'CFBundleName': 'Nova Flux', 'CFBundleDisplayName': 'Nova Flux',
  'CFBundleExecutable': 'nova-flux', 'CFBundleIdentifier':'com.nova.flux',
  'CFBundlePackageType':'APPL', 'CFBundleShortVersionString':version,
- 'CFBundleVersion':'5', 'CFBundleIconFile':'AppIcon.icns',
+ 'CFBundleVersion':'6', 'CFBundleIconFile':'AppIcon.icns',
  'CFBundleDevelopmentRegion':'en', 'CFBundleLocalizations':['en'],
  'LSMinimumSystemVersion':'12.0', 'LSApplicationCategoryType':'public.app-category.video',
  'NSHighResolutionCapable':True,

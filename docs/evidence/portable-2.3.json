@@ -1,0 +1,291 @@
+{
+  "schema": 1,
+  "application": "Nova Flux",
+  "version": "2.3.0",
+  "evidence_date": "2026-10-20",
+  "scope": "Native Windows/Linux private validation of the named source revision; not a public binary release.",
+  "source_commit": "c5da0c4cbb47e9925d959422f3803f4e88a0d7d6",
+  "validation_run": {
+    "id": 39421667122,
+    "repository_visibility": "private",
+    "conclusion": "success"
+  },
+  "verification": {
+    "downloaded_artifact_reports": "PASS",
+    "png_chunk_crc_and_decompressed_pixels": "PASS",
+    "png_hashes_match_reports": "PASS",
+    "archive_hashes_match_reports": "PASS",
+    "all_manifest_listed_archive_files_hash_and_length": "PASS",
+    "packaged_application_uses_staged_runtime_without_NOVA_RUNTIME": "PASS"
+  },
+  "limits": [
+    "This receipt does not establish tests on later source revisions.",
+    "Software graphics adapters were exercised; physical GPU drivers and GPU video encoding were not validated.",
+    "Smoke rendering uses an empty queue; manual dialogs, drag/drop, accessibility and file-manager focus were not exercised.",
+    "Public runtime redistribution remains pending complete corresponding sources and third-party notices.",
+    "The repository contains this receipt, not private packages, runtime binaries, user media or raw private logs."
+  ],
+  "platforms": [
+    {
+      "target": "windows-x86_64",
+      "runner": "windows-2022",
+      "status": "PASS",
+      "tests": {
+        "executables": 9,
+        "failed": 0,
+        "ignored": 0,
+        "passed": 78,
+        "passed_by_executable": {
+          "library": 32,
+          "desktop": 13,
+          "boundary_live": 3,
+          "engine_live": 6,
+          "estimate_live": 0,
+          "performance_live": 3,
+          "platform_portable": 3,
+          "resolution_live": 9,
+          "target_size_live": 9
+        },
+        "coverage_note": "Unix-only estimate wrappers and four Unix-only performance tests are excluded; a Windows metadata identity test is included."
+      },
+      "python_boundary_tests": {
+        "passed": 17,
+        "failed": 0
+      },
+      "steps": [
+        {
+          "name": "python-boundary-tests",
+          "status": "PASS",
+          "exit_code": 0
+        },
+        {
+          "name": "fetch-pinned-runtime",
+          "status": "PASS",
+          "exit_code": 0
+        },
+        {
+          "name": "rust-toolchain",
+          "status": "PASS",
+          "exit_code": 0
+        },
+        {
+          "name": "format",
+          "status": "PASS",
+          "exit_code": 0
+        },
+        {
+          "name": "clippy",
+          "status": "PASS",
+          "exit_code": 0
+        },
+        {
+          "name": "all-real-media-tests",
+          "status": "PASS",
+          "exit_code": 0
+        },
+        {
+          "name": "release-build",
+          "status": "PASS",
+          "exit_code": 0
+        },
+        {
+          "name": "release-diagnose",
+          "status": "PASS",
+          "exit_code": 0
+        },
+        {
+          "name": "native-smoke",
+          "status": "PASS",
+          "exit_code": 0
+        },
+        {
+          "name": "portable-package",
+          "status": "PASS",
+          "exit_code": 0
+        },
+        {
+          "name": "packaged-diagnose",
+          "status": "PASS",
+          "exit_code": 0
+        },
+        {
+          "name": "packaged-smoke",
+          "status": "PASS",
+          "exit_code": 0
+        }
+      ],
+      "release_diagnose": {
+        "app_version": "2.3.0",
+        "error": null,
+        "ready": true,
+        "version": "ffmpeg version n8.1.3-18-g46d899d7a0-20261019 Copyright (c) 2000-2026 the FFmpeg developers"
+      },
+      "staged_diagnose": {
+        "app_version": "2.3.0",
+        "error": null,
+        "ready": true,
+        "version": "ffmpeg version n8.1.3-18-g46d899d7a0-20261019 Copyright (c) 2000-2026 the FFmpeg developers"
+      },
+      "rendering": {
+        "native-smoke": {
+          "frames": 28,
+          "adapter": "Some(AdapterInfo { name: \"Microsoft Basic Render Driver\", vendor: 5140, device: 140, device_type: Cpu, device_pci_bus_id: \"\", driver: \"10.0.20348.5386\", driver_info: \"\", backend: Dx12, subgroup_min_size: 4, subgroup_max_size: 4, transient_saves_memory: Some(false), limit_bucket: None })",
+          "image": {
+            "width": 1024,
+            "height": 768,
+            "bytes": 143837,
+            "sha256": "8eaf7d2e857acd044e35ee811ba05b1da77af4e0b65ba2406595709fc5446ee8"
+          }
+        },
+        "packaged-smoke": {
+          "frames": 26,
+          "adapter": "Some(AdapterInfo { name: \"Microsoft Basic Render Driver\", vendor: 5140, device: 140, device_type: Cpu, device_pci_bus_id: \"\", driver: \"10.0.20348.5386\", driver_info: \"\", backend: Dx12, subgroup_min_size: 4, subgroup_max_size: 4, transient_saves_memory: Some(false), limit_bucket: None })",
+          "image": {
+            "width": 1024,
+            "height": 768,
+            "bytes": 143837,
+            "sha256": "8eaf7d2e857acd044e35ee811ba05b1da77af4e0b65ba2406595709fc5446ee8"
+          }
+        }
+      },
+      "private_test_package": {
+        "archive": "Nova-Flux-2.3.0-windows-x86_64-PRIVATE-CI.zip",
+        "bytes": 135614684,
+        "sha256": "a32f56bd13cfd8317bf3f9136c8aaed613e3fe354472b9628eba10f2259ae09c",
+        "verified_archive_files": 54,
+        "binary_sha256": "e739d20536aed1dcc89a4c4482650add422191f9c1192c166b59c7c845348059",
+        "distribution_status": "private-ci-only"
+      }
+    },
+    {
+      "target": "linux-x86_64",
+      "runner": "ubuntu-22.04",
+      "status": "PASS",
+      "tests": {
+        "executables": 9,
+        "failed": 0,
+        "ignored": 0,
+        "passed": 100,
+        "passed_by_executable": {
+          "library": 31,
+          "desktop": 13,
+          "boundary_live": 3,
+          "engine_live": 6,
+          "estimate_live": 19,
+          "performance_live": 7,
+          "platform_portable": 3,
+          "resolution_live": 9,
+          "target_size_live": 9
+        }
+      },
+      "python_boundary_tests": {
+        "passed": 17,
+        "failed": 0
+      },
+      "steps": [
+        {
+          "name": "python-boundary-tests",
+          "status": "PASS",
+          "exit_code": 0
+        },
+        {
+          "name": "fetch-pinned-runtime",
+          "status": "PASS",
+          "exit_code": 0
+        },
+        {
+          "name": "rust-toolchain",
+          "status": "PASS",
+          "exit_code": 0
+        },
+        {
+          "name": "format",
+          "status": "PASS",
+          "exit_code": 0
+        },
+        {
+          "name": "clippy",
+          "status": "PASS",
+          "exit_code": 0
+        },
+        {
+          "name": "all-real-media-tests",
+          "status": "PASS",
+          "exit_code": 0
+        },
+        {
+          "name": "release-build",
+          "status": "PASS",
+          "exit_code": 0
+        },
+        {
+          "name": "release-diagnose",
+          "status": "PASS",
+          "exit_code": 0
+        },
+        {
+          "name": "native-smoke",
+          "status": "PASS",
+          "exit_code": 0
+        },
+        {
+          "name": "portable-package",
+          "status": "PASS",
+          "exit_code": 0
+        },
+        {
+          "name": "packaged-diagnose",
+          "status": "PASS",
+          "exit_code": 0
+        },
+        {
+          "name": "packaged-smoke",
+          "status": "PASS",
+          "exit_code": 0
+        }
+      ],
+      "release_diagnose": {
+        "app_version": "2.3.0",
+        "error": null,
+        "ready": true,
+        "version": "ffmpeg version n8.1.3-18-g46d899d7a0-20261019 Copyright (c) 2000-2026 the FFmpeg developers"
+      },
+      "staged_diagnose": {
+        "app_version": "2.3.0",
+        "error": null,
+        "ready": true,
+        "version": "ffmpeg version n8.1.3-18-g46d899d7a0-20261019 Copyright (c) 2000-2026 the FFmpeg developers"
+      },
+      "rendering": {
+        "native-smoke": {
+          "frames": 159,
+          "adapter": "Some(AdapterInfo { name: \"llvmpipe (LLVM 15.0.7, 256 bits)\", vendor: 65541, device: 0, device_type: Cpu, device_pci_bus_id: \"\", driver: \"llvmpipe\", driver_info: \"Mesa 23.2.1-1ubuntu3.1~22.04.4 (LLVM 15.0.7)\", backend: Vulkan, subgroup_min_size: 8, subgroup_max_size: 8, transient_saves_memory: Some(false), limit_bucket: None })",
+          "image": {
+            "width": 1180,
+            "height": 800,
+            "bytes": 132486,
+            "sha256": "4d4086af4263ea7db3c9b17f8af862da04ab259719acc1675dcdb9c5c346aa50"
+          }
+        },
+        "packaged-smoke": {
+          "frames": 186,
+          "adapter": "Some(AdapterInfo { name: \"llvmpipe (LLVM 15.0.7, 256 bits)\", vendor: 65541, device: 0, device_type: Cpu, device_pci_bus_id: \"\", driver: \"llvmpipe\", driver_info: \"Mesa 23.2.1-1ubuntu3.1~22.04.4 (LLVM 15.0.7)\", backend: Vulkan, subgroup_min_size: 8, subgroup_max_size: 8, transient_saves_memory: Some(false), limit_bucket: None })",
+          "image": {
+            "width": 1180,
+            "height": 800,
+            "bytes": 132486,
+            "sha256": "4d4086af4263ea7db3c9b17f8af862da04ab259719acc1675dcdb9c5c346aa50"
+          }
+        }
+      },
+      "private_test_package": {
+        "archive": "Nova-Flux-2.3.0-linux-x86_64-PRIVATE-CI.tar.gz",
+        "bytes": 147769459,
+        "sha256": "e2a9de5dab52cb12474d5e7f883bc315ec79717428e2d270aafef091ad64dbae",
+        "verified_archive_files": 76,
+        "binary_sha256": "8758aa38ef5a326b379bfa2e7e839b25ae3f8c80ddbba0a0a3ad519ecfc49ce3",
+        "distribution_status": "private-ci-only"
+      }
+    }
+  ]
+}

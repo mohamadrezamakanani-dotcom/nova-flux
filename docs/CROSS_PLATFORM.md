@@ -4,20 +4,28 @@ Rust source can target several operating systems. A compiled application and its
 FFmpeg runtime still belong to one operating system and processor architecture.
 An Apple Silicon `.app` cannot be used as a Windows or Linux executable.
 
-The existing delivered build and runtime were validated on Apple Silicon macOS.
-Windows and Linux support is being established through native CI, with separate
-builds, real media conversion tests, rendered native windows and portable runtime
-packages. A workflow definition or a cross-compile is not a passing native run.
-For a particular revision, use that revision's successful `report.json` and logs
-as evidence; do not infer results from this document.
+Version 2.3 passed native Windows and Linux validation on 2026-10-20 at source
+commit `c5da0c4cbb47e9925d959422f3803f4e88a0d7d6`. Windows passed 78 Rust tests;
+Linux passed 100. Both passed formatting, Clippy with warnings denied, real media
+conversion tests, optimized builds, runtime diagnosis, native rendered windows,
+private portable packaging and a second launch using the staged runtime.
+The [sanitized validation receipt](evidence/portable-2.3.json) records exact test
+counts, render evidence and package hashes without including private binaries,
+user media or local paths. Apple Silicon macOS acceptance is recorded separately
+in [current validation](../VALIDATION.md).
+
+This receipt applies to that specific source revision. The public source workflow
+validates a published revision separately; a workflow definition or cross-compile
+alone is not a passing native run. Private binary test packages remain separate
+from public MIT source publication.
 
 ## Native targets and limits
 
 | Target | Native CI environment | Graphics exercised | Distribution status |
 | --- | --- | --- | --- |
-| Apple Silicon macOS | Existing local Mac acceptance | Metal, CPU and Apple VideoToolbox | Existing arm64 app; changes require the Mac regression checks |
-| Windows x86_64 | GitHub `windows-2022` | DX12 software/WARP adapter with real wgpu rendering | Private test ZIP after native checks pass |
-| Linux x86_64 | GitHub `ubuntu-22.04` | X11/Xvfb with Mesa lavapipe Vulkan | Private test tar.gz after native checks pass |
+| Apple Silicon macOS | Local Mac acceptance | Metal, CPU and Apple VideoToolbox | Local arm64 application; see current Mac validation |
+| Windows x86_64 | GitHub `windows-2022`; 78 tests passed | DX12 / Microsoft Basic Render Driver (WARP) | Private test ZIP validated; no public binary release |
+| Linux x86_64 | GitHub `ubuntu-22.04`; 100 tests passed | X11/Xvfb, Vulkan llvmpipe, Mesa 23.2.1 | Private test tar.gz validated; no public binary release |
 
 Windows Server 2022 evidence does not establish testing on every Windows 10/11
 installation or graphics driver. Ubuntu 22.04 evidence does not establish every
@@ -26,6 +34,13 @@ recorded in `scripts/portable_runtime.lock.json`; that minimum does not prove th
 GUI supports the same baseline. Intel Macs and Windows/Linux ARM64 have no
 validated package or pinned runtime in this matrix. NVENC, Quick Sync and VAAPI
 are not implemented acceleration paths; Windows/Linux use the tested CPU path.
+
+The native and staged windows both rendered successfully: Windows captured
+1024×768 pixels after 28 / 26 frames; Linux captured 1180×800 after 159 / 186
+frames. Downloaded PNG chunk integrity, decompressed pixels and image hashes
+matched the reports. The downloaded ZIP/tar.gz hashes and all 54 Windows / 76
+Linux manifest-listed archive files also matched. This is an empty-queue rendering
+check, not a manual acceptance run on physical Windows or Linux machines.
 
 The UI uses egui/eframe and wgpu, with X11/Wayland backend features enabled for
 Linux. File/folder selection uses native dialogs; Linux requires an appropriate
@@ -103,7 +118,8 @@ Install Rust 1.99.0 with `rustfmt` and `clippy`, Python 3.10 or newer, and a nat
 linker/toolchain. Windows builds use Visual Studio's C++ build tools and Windows
 SDK. Linux needs the X11/Wayland development libraries, a usable Vulkan/GLES
 driver, and the desktop services appropriate to native dialogs. The workflow
-lists the Ubuntu packages used for its native baseline.
+lists the Ubuntu packages used for its native baseline, including
+`libxkbcommon-x11-dev` for the X11 keyboard library loaded by winit.
 
 On Windows, from a fresh source checkout:
 
