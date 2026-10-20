@@ -12,6 +12,9 @@ versions, exact build commands and configuration logs. Local private paths
 in public logs/manifests use `{WORK}`, `{SOURCES}`, `{RUNTIME}` and `{RECIPE}`
 placeholders. The original full build logs remain in the private build
 directory. Source archives are copied byte for byte, not repacked.
+If a build command fails, its underlying configure/CMake/Meson diagnostics
+are copied into that private work directory's `logs/` folder beside the
+command log. These raw failure diagnostics are private build evidence.
 
 ## Native tools
 
@@ -46,6 +49,11 @@ Make metacharacters; the upstream configure/Make recipes require that boundary.
   Native Python paths are converted for Bash configure scripts using
   `cygpath`; CMake/Meson receive native paths. MSYS2 is a build dependency
   and must not be required by the finished binaries.
+  The driver derives the MSYS2 root from the selected `/ucrt64/bin/gcc.exe`
+  and binds every Windows subprocess to an absolute executable in that
+  installation. Bash, Make, cygpath and pacman use its `/usr/bin`; compiler
+  and other native build tools use `/ucrt64/bin`. Preflight probes those same
+  executables. Missing tools fail instead of falling back to Windows/WSL Bash.
 
 ## Acquire, build, verify
 
@@ -114,6 +122,10 @@ installed `libz.a` alias and records that operation in the build manifest.
 Vorbis 1.3.7's original CMake files are compatible with CMake 4 through
 the explicit `CMAKE_POLICY_VERSION_MINIMUM=3.5` configure option. Neither
 operation edits upstream source.
+On Linux, Vorbis 1.3.7 also receives `-DVORBIS_LIBS=-lm`: its original
+CMake recipe links the math library for CMake consumers but leaves the
+`vorbis.pc` private-library substitution empty. This configuration option
+preserves the system math dependency for FFmpeg's static pkg-config checks.
 
 Build flags avoid machine-specific x86 tuning. Runtime CPU dispatch remains
 available. File/debug prefix maps remove private source paths from compiled

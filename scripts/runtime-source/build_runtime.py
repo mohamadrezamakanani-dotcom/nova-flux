@@ -52,6 +52,26 @@ CONTROLLED_ENV = (
     "CPPFLAGS", "LDFLAGS", "PKG_CONFIG", "PKG_CONFIG_PATH", "PKG_CONFIG_LIBDIR",
     "SOURCE_DATE_EPOCH", "MACOSX_DEPLOYMENT_TARGET", "LC_ALL", "LANG", "TZ",
 )
+WINDOWS_MSYS_TOOLS = ("bash", "make", "cygpath", "pacman")
+WINDOWS_UCRT_TOOLS = ("gcc", "g++", "ar", "ranlib", "nm", "strip", "pkg-config", "cmake", "meson", "ninja", "objdump", "nasm")
+
+
+def windows_tool_paths(compiler: Path) -> dict[str, str]:
+    """Bind both MSYS and UCRT tools to the selected native GCC installation.
+
+    Native CreateProcess can search System32 before PATH and select WSL's
+    bash.exe. Absolute executable paths remove that different search policy.
+    """
+    compiler = compiler.resolve()
+    if compiler.parent.name.lower() != "bin" or compiler.parent.parent.name.lower() != "ucrt64" or compiler.name.lower() != "gcc.exe":
+        raise ValueError("Windows GCC must be the native gcc.exe in an MSYS2 UCRT64 bin directory")
+    root = compiler.parent.parent.parent
+    paths = {name: root / "usr/bin" / (name + ".exe") for name in WINDOWS_MSYS_TOOLS}
+    paths.update({name: compiler.parent / (name + ".exe") for name in WINDOWS_UCRT_TOOLS})
+    missing = [str(path) for path in paths.values() if not path.is_file()]
+    if missing:
+        raise ValueError("Missing tools in the selected MSYS2/UCRT64 installation: " + ", ".join(missing))
+    return {name: str(path) for name, path in paths.items()}
 
 
 def sha256(path: Path) -> str:
@@ -211,6 +231,13 @@ class Builder:
         self.is_windows = self.target == "windows-x86_64"
         self.cc = "clang" if self.target == "macos-arm64" else "gcc"
         self.cxx = "clang++" if self.target == "macos-arm64" else "g++"
+        self.executables: dict[str, str] = {}
+        if self.is_windows:
+            require_host(self.target)
+            compiler = shutil.which(self.cc)
+            if not compiler:
+                raise ValueError("Missing native MSYS2 UCRT64 GCC")
+            self.executables = windows_tool_paths(Path(compiler))
         self.replacements = sorted(((str(self.work), "{WORK}"), (str(self.cache), "{SOURCES}"),
                                     (str(self.out), "{RUNTIME}"), (str(HERE), "{RECIPE}"),
                                     (str(Path.home()), "{HOME}")), key=lambda x: -len(x[0]))
@@ -228,8 +255,16 @@ class Builder:
     def posix(self, path: Path) -> str:
         if not self.is_windows:
             return path.as_posix()
-        result = subprocess.run(["cygpath", "-u", str(path)], check=True, capture_output=True, text=True)
+        result = subprocess.run(self.command(["cygpath", "-u", str(path)]), check=True, capture_output=True, text=True)
         return result.stdout.strip()
+
+    def command(self, args: list[str]) -> list[str]:
+        if not self.is_windows or Path(args[0]).is_absolute():
+            return args
+        executable = self.executables.get(args[0])
+        if not executable:
+            raise ValueError(f"Windows build command is not bound to the verified MSYS2/UCRT64 installation: {args[0]}")
+        return [executable, *args[1:]]
 
     def build_environment(self) -> dict[str, str]:
         env = dict(os.environ)
@@ -260,6 +295,7 @@ class Builder:
         return env
 
     def run(self, package: str, args: list[str], cwd: Path, *, capture: bool = False, timeout: int = 3600) -> str:
+        args = self.command(args)
         record = {"package": package, "argv": [self.public(str(x)) for x in args], "cwd": self.public(str(cwd))}
         self.commands.append(record)
         if self.args.dry_run:
@@ -281,9 +317,24 @@ class Builder:
                 output = ""
         record.update({"exit_code": process.returncode, "elapsed_seconds": round(time.monotonic() - started, 3)})
         if process.returncode:
+            record["failure_diagnostics"] = self.retain_failure_diagnostics(package, number)
             tail = "\n".join(log_path.read_text(encoding="utf-8", errors="replace").splitlines()[-35:])
-            raise RuntimeError(f"{package} failed (exit {process.returncode}); full log: {log_path}\n{tail}")
+            details = ", ".join(record["failure_diagnostics"])
+            raise RuntimeError(f"{package} failed (exit {process.returncode}); full log: {log_path}\n{tail}\nUnderlying diagnostics retained in private logs: {details or 'none available'}")
         return output
+
+    def retain_failure_diagnostics(self, package: str, number: int) -> list[str]:
+        if package not in self.entries:
+            return []
+        retained = []
+        for origin, parent in (("build", self.build(package)), ("source", self.source(package))):
+            for relative in ("config.log", "ffbuild/config.log", "meson-logs/meson-log.txt", "CMakeFiles/CMakeError.log", "CMakeFiles/CMakeConfigureLog.yaml"):
+                source = parent / relative
+                if source.is_file():
+                    name = f"{number:03d}-{package}-{origin}-{relative.replace('/', '-')}"
+                    shutil.copyfile(source, self.raw_logs / name)
+                    retained.append(name)
+        return retained
 
     def preflight(self) -> None:
         require_host(self.target)
@@ -296,20 +347,23 @@ class Builder:
             required += ["cygpath", "pacman"]
         elif self.target == "linux-x86_64" and not shutil.which("dpkg-query") and not shutil.which("rpm"):
             raise ValueError("Linux compiler notices require a package-managed GCC (dpkg-query or rpm)")
-        missing = [tool for tool in required if not shutil.which(tool)]
+        missing = [tool for tool in required if not (self.executables.get(tool) if self.is_windows else shutil.which(tool))]
         if missing:
             raise ValueError("Missing native build tools: " + ", ".join(missing))
         for tool in required:
             args = [tool, "--version"] if tool not in ("otool", "codesign") else [tool, "-h"]
+            args = self.command(args)
             result = subprocess.run(args, capture_output=True, text=True, encoding="utf-8", errors="replace", env=self.env, timeout=20)
-            self.tools[tool] = {"executable": self.public(shutil.which(tool)),
+            if self.is_windows and result.returncode:
+                raise ValueError(f"Verified Windows tool could not run: {args[0]}: {result.stdout}{result.stderr}")
+            self.tools[tool] = {"executable": self.public(args[0] if self.is_windows else shutil.which(tool)),
                                 "version_output": self.public((result.stdout + result.stderr).strip())[:12000]}
         self.tools["python"] = {"version_output": sys.version, "implementation": platform.python_implementation()}
-        machine = subprocess.run([self.cc, "-dumpmachine"], check=True, capture_output=True, text=True, env=self.env).stdout.strip()
+        machine = subprocess.run(self.command([self.cc, "-dumpmachine"]), check=True, capture_output=True, text=True, env=self.env).stdout.strip()
         if self.is_windows and machine != "x86_64-w64-mingw32":
             raise ValueError(f"Expected native UCRT64 MinGW GCC; compiler target is {machine!r}")
         self.tools[self.cc]["target"] = machine
-        if self.is_windows and "ucrt64" not in shutil.which(self.cc).replace("\\", "/").lower():
+        if self.is_windows and "ucrt64" not in self.executables[self.cc].replace("\\", "/").lower():
             raise ValueError("Windows GCC must come from the MSYS2 UCRT64 prefix")
 
     def source(self, name: str) -> Path:
@@ -367,7 +421,12 @@ class Builder:
             if not self.args.dry_run:
                 shutil.copyfile(self.prefix / "lib" / "libzs.a", self.prefix / "lib" / "libz.a")
         self.cmake("libogg", ["-DINSTALL_DOCS=OFF", "-DINSTALL_PKG_CONFIG_MODULE=ON", "-DINSTALL_CMAKE_PACKAGE_MODULE=ON"])
-        self.cmake("libvorbis", [f"-DOGG_INCLUDE_DIR={self.prefix.as_posix()}/include", f"-DOGG_LIBRARY={self.prefix.as_posix()}/lib/libogg.a"])
+        vorbis_options = [f"-DOGG_INCLUDE_DIR={self.prefix.as_posix()}/include", f"-DOGG_LIBRARY={self.prefix.as_posix()}/lib/libogg.a"]
+        if self.target == "linux-x86_64":
+            # Upstream 1.3.7's CMake targets link libm but do not populate
+            # VORBIS_LIBS in vorbis.pc.in. Static pkg-config consumers need it.
+            vorbis_options.append("-DVORBIS_LIBS=-lm")
+        self.cmake("libvorbis", vorbis_options)
         self.cmake("opus", ["-DOPUS_BUILD_SHARED_LIBRARY=OFF", "-DOPUS_BUILD_TESTING=OFF", "-DOPUS_BUILD_PROGRAMS=OFF", "-DOPUS_INSTALL_PKG_CONFIG_MODULE=ON", "-DOPUS_DRED=OFF", "-DOPUS_OSCE=OFF"])
         self.configure_make("lame", [f"--prefix={prefix}", "--libdir=" + prefix + "/lib", "--disable-shared", "--enable-static", "--with-pic", "--disable-frontend", "--disable-decoder", "--disable-analyzer-hooks"])
         # x264's own configure defaults to no shared library and enables its
@@ -578,7 +637,7 @@ class Builder:
                 candidates = []
                 for filename in listing:
                     if "/share/licenses/" in filename and not filename.endswith("/"):
-                        native = subprocess.run(["cygpath", "-w", filename], check=True, capture_output=True, text=True).stdout.strip()
+                        native = subprocess.run(self.command(["cygpath", "-w", filename]), check=True, capture_output=True, text=True).stdout.strip()
                         if Path(native).is_file():
                             candidates.append((filename.lstrip("/"), Path(native)))
             elif shutil.which("dpkg-query"):
@@ -707,8 +766,91 @@ separate native application validation report for those results.
 def self_test() -> None:
     import io
     import unittest
+    from unittest.mock import patch
 
     class BuildContractTests(unittest.TestCase):
+        def test_linux_vorbis_recipe_exports_private_math_dependency(self):
+            builder = object.__new__(Builder)
+            builder.args = argparse.Namespace(dry_run=True, jobs=1)
+            builder.work = Path("/recipe-check")
+            builder.prefix = builder.work / "prefix"
+            builder.entries = {name: {"source_dir": name} for name in ORDER}
+            builder.is_windows = False
+            builder.cc, builder.cxx = "gcc", "g++"
+            builder.configure_make = lambda *_args, **_kwargs: None
+            builder.run = lambda *_args, **_kwargs: ""
+            builder.assert_static_prefix = lambda: None
+            for target, expected in (("linux-x86_64", True), ("macos-arm64", False)):
+                commands = {}
+                builder.target = target
+                builder.cmake = lambda name, options: commands.update({name: options})
+                builder.recipes()
+                self.assertEqual("-DVORBIS_LIBS=-lm" in commands["libvorbis"], expected)
+
+        def test_failed_configure_retains_underlying_linker_diagnostics(self):
+            with tempfile.TemporaryDirectory() as temp:
+                builder = object.__new__(Builder)
+                builder.work = Path(temp).resolve()
+                builder.raw_logs = builder.work / "logs"
+                builder.raw_logs.mkdir()
+                builder.entries = {"ffmpeg": {"source_dir": "ffmpeg"}}
+                builder.commands, builder.replacements, builder.env = [], [], {}
+                builder.args = argparse.Namespace(dry_run=False)
+                builder.is_windows = False
+                underlying = builder.build("ffmpeg") / "ffbuild/config.log"
+                underlying.parent.mkdir(parents=True)
+                original = b"link test\nundefined reference to floor\n"
+                underlying.write_bytes(original)
+                result = subprocess.CompletedProcess(["bash"], 1, "ERROR: vorbis not found\n", "")
+                with patch.object(subprocess, "run", return_value=result), self.assertRaisesRegex(RuntimeError, "Underlying diagnostics retained"):
+                    builder.run("ffmpeg", ["bash", "configure"], builder.work, capture=True)
+                retained = builder.commands[0]["failure_diagnostics"]
+                self.assertEqual(len(retained), 1)
+                self.assertEqual((builder.raw_logs / retained[0]).read_bytes(), original)
+
+        def windows_tools_fixture(self, root):
+            installation = root / "msys64"
+            for directory, names in (("usr/bin", WINDOWS_MSYS_TOOLS), ("ucrt64/bin", WINDOWS_UCRT_TOOLS)):
+                folder = installation / directory
+                folder.mkdir(parents=True)
+                for name in names:
+                    (folder / (name + ".exe")).write_bytes(b"tool fixture")
+            return installation
+
+        def test_windows_execution_uses_bound_msys_bash_over_system32(self):
+            with tempfile.TemporaryDirectory() as temp:
+                root = Path(temp).resolve()
+                installation = self.windows_tools_fixture(root)
+                rogue = root / "Windows/System32/bash.exe"
+                rogue.parent.mkdir(parents=True)
+                rogue.write_bytes(b"WSL fixture")
+                builder = object.__new__(Builder)
+                builder.is_windows = True
+                builder.executables = windows_tool_paths(installation / "ucrt64/bin/gcc.exe")
+                builder.args = argparse.Namespace(dry_run=False)
+                builder.raw_logs = root / "logs"
+                builder.raw_logs.mkdir()
+                builder.commands, builder.replacements, builder.env = [], [], {}
+                expected = str(installation / "usr/bin/bash.exe")
+                result = subprocess.CompletedProcess([expected], 0, "MSYS bash\n", "")
+                with patch.object(shutil, "which", return_value=str(rogue)), patch.object(subprocess, "run", return_value=result) as process:
+                    self.assertEqual(builder.run("configure", ["bash", "configure"], root, capture=True), "MSYS bash\n")
+                    self.assertEqual(process.call_args.args[0], [expected, "configure"])
+                    self.assertEqual(builder.commands[0]["argv"][0], expected)
+                    builder.posix(root)
+                    self.assertEqual(process.call_args.args[0][0], str(installation / "usr/bin/cygpath.exe"))
+
+        def test_windows_missing_msys_bash_cannot_fall_back_to_wsl(self):
+            with tempfile.TemporaryDirectory() as temp:
+                installation = self.windows_tools_fixture(Path(temp).resolve())
+                (installation / "usr/bin/bash.exe").unlink()
+                with self.assertRaisesRegex(ValueError, "Missing tools"):
+                    windows_tool_paths(installation / "ucrt64/bin/gcc.exe")
+
+        def test_windows_rejects_compiler_outside_ucrt64(self):
+            with self.assertRaisesRegex(ValueError, "UCRT64"):
+                windows_tool_paths(Path("/unrelated/bin/gcc.exe"))
+
         def test_current_and_legacy_filter_flag_columns(self):
             # Captured FFmpeg 8.1.3 output has two capability columns. Older
             # releases printed three. Neither format may hide real filters.

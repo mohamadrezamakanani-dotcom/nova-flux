@@ -871,7 +871,14 @@ impl Desktop {
                     .color(Color32::from_rgb(115, 142, 158)),
             );
             ui.add_space(12.0);
-            if ui.button("About & licenses").clicked() {
+            if ui
+                .add(
+                    egui::Button::new("About & licenses")
+                        .fill(NAVY)
+                        .stroke(Stroke::NONE),
+                )
+                .clicked()
+            {
                 self.about_open = true;
             }
             if ui
@@ -881,7 +888,9 @@ impl Desktop {
                         "Light appearance"
                     } else {
                         "Dark appearance"
-                    }),
+                    })
+                    .fill(NAVY)
+                    .stroke(Stroke::NONE),
                 )
                 .clicked()
             {
