@@ -1,0 +1,9 @@
+# Build recipes and lockfiles must have identical bytes on every native host.
+* text=auto eol=lf
+*.png -text
+*.icns -text
+*.zip -text
+*.gz -text
+*.xz -text
+# Retain original upstream license/tree payloads byte for byte, including EOLs.
+/scripts/notices-upstream/** -text

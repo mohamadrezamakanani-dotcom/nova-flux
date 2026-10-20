@@ -325,6 +325,7 @@ struct Desktop {
     source_cancel: Arc<AtomicBool>,
     sources_at: Instant,
     smoke: Option<SmokeTest>,
+    about_open: bool,
 }
 
 impl Desktop {
@@ -373,6 +374,7 @@ impl Desktop {
             source_cancel: Arc::new(AtomicBool::new(false)),
             sources_at: Instant::now(),
             smoke: SmokeTest::new(cc),
+            about_open: false,
         }
     }
 
@@ -869,6 +871,9 @@ impl Desktop {
                     .color(Color32::from_rgb(115, 142, 158)),
             );
             ui.add_space(12.0);
+            if ui.button("About & licenses").clicked() {
+                self.about_open = true;
+            }
             if ui
                 .add_enabled(
                     !self.closing,
@@ -1097,7 +1102,12 @@ impl Desktop {
                     ui.selectable_value(&mut self.preferences.settings.concurrency, 0, "Automatic · CPU and RAM budget");
                     for count in [1, 2, 3, 5, 10] { ui.selectable_value(&mut self.preferences.settings.concurrency, count, format!("{count} {} at a time", if count == 1 { "file" } else { "files" })); }
                 });
-                small_note(ui, "Benchmarks encoders on this device, reuses calibration, and adapts work to CPU and available RAM. Size limits stay verified.", self.muted());
+                let performance_note = if cfg!(target_os = "macos") {
+                    "Benchmarks compatible encoders, reuses calibration, and adapts work to CPU and available RAM. Size limits stay verified."
+                } else {
+                    "Uses compatible CPU encoders and adapts parallel work to CPU and available RAM. Size limits stay verified."
+                };
+                small_note(ui, performance_note, self.muted());
                 if self.preferences.settings.quality == "original" {
                     ui.add_space(13.0);
                     small_note(ui, "Stream copy requires codecs compatible with the output container. It never silently re-encodes media.", CORAL);
@@ -1561,6 +1571,34 @@ impl eframe::App for Desktop {
                 bottom: 12,
             }))
             .show(ui, |ui| self.queue(ui));
+        let mut about_open = self.about_open;
+        egui::Window::new("About Nova Flux")
+            .open(&mut about_open)
+            .collapsible(false)
+            .resizable(false)
+            .default_width(420.0)
+            .show(&ctx, |ui| {
+                ui.heading(format!("Nova Flux {}", env!("CARGO_PKG_VERSION")));
+                ui.label("Local media conversion. Your files stay on your device.");
+                ui.add_space(12.0);
+                ui.label("Application code: MIT license.");
+                ui.label("The separate FFmpeg tools include GPL components and are distributed under GPL version 3 or later. Third-party code and fonts retain their own licenses.");
+                ui.add_space(8.0);
+                ui.label("Exact media source archives, build instructions and codec licenses are included in runtime/. Rust and font notices are included in licenses/.");
+                if ui.button("Show bundled licenses").clicked() {
+                    let result = platform::runtime_dir().and_then(|runtime| {
+                        let resources = runtime.parent().ok_or_else(|| {
+                            std::io::Error::new(std::io::ErrorKind::NotFound, "Cannot locate bundled licenses")
+                        })?;
+                        platform::reveal(&resources.join("licenses/README.txt"))
+                    });
+                    if let Err(error) = result {
+                        self.error = Some(format!("Cannot show bundled licenses: {error}"));
+                    }
+                }
+                ui.hyperlink_to("Source code and releases", "https://github.com/mohamadrezamakanani-dotcom/nova-flux");
+            });
+        self.about_open = about_open;
         let hovered = ctx.input(|input| !input.raw.hovered_files.is_empty());
         if let Some(smoke) = &mut self.smoke {
             smoke.update(&ctx);

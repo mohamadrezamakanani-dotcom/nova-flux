@@ -1,0 +1,153 @@
+name: Matched source runtime validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['codex/runtime-source-release']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: matched-runtime-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  native:
+    if: github.event.repository.private == true
+    name: Matched ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 75
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-2022
+            platform: windows-x86_64
+            rust_target: x86_64-pc-windows-msvc
+          - os: ubuntu-22.04
+            platform: linux-x86_64
+            rust_target: x86_64-unknown-linux-gnu
+    env:
+      CARGO_BUILD_JOBS: '2'
+      CARGO_TERM_COLOR: never
+      CARGO_PROFILE_DEV_DEBUG: '0'
+      CARGO_PROFILE_TEST_DEBUG: '0'
+      CARGO_INCREMENTAL: '0'
+      RUST_BACKTRACE: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - name: Install pinned Rust toolchain
+        run: rustup toolchain install 1.99.0 --profile minimal --component rustfmt --component clippy --component rust-docs
+      - name: Keep private build paths out of Windows application bytes
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          "RUSTFLAGS=-C target-feature=+crt-static --remap-path-prefix=$env:GITHUB_WORKSPACE=/nova-source --remap-path-prefix=$env:USERPROFILE=/nova-home" >> $env:GITHUB_ENV
+      - name: Keep private build paths out of Linux application bytes
+        if: runner.os == 'Linux'
+        run: |
+          echo "RUSTFLAGS=--remap-path-prefix=$GITHUB_WORKSPACE=/nova-source --remap-path-prefix=$HOME=/nova-home" >> "$GITHUB_ENV"
+      - name: Install Linux native build and desktop dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake meson ninja-build pkg-config nasm libxkbcommon-dev libxkbcommon-x11-dev libwayland-dev libx11-dev libxcursor-dev libxrandr-dev libxi-dev libxinerama-dev libgl1-mesa-dev libegl1-mesa-dev libvulkan1 mesa-vulkan-drivers vulkan-tools xvfb xauth xdg-utils
+      # v2 tag resolved to this exact commit using the official GitHub API.
+      - name: Install Windows UCRT native build tools
+        if: runner.os == 'Windows'
+        uses: msys2/setup-msys2@ec48f7c5447b3140e2b088413ae3a55687bccb6e
+        with:
+          msystem: UCRT64
+          update: true
+          install: >-
+            make
+            diffutils
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-python
+            mingw-w64-ucrt-x86_64-cmake
+            mingw-w64-ucrt-x86_64-meson
+            mingw-w64-ucrt-x86_64-ninja
+            mingw-w64-ucrt-x86_64-pkgconf
+            mingw-w64-ucrt-x86_64-nasm
+      - name: Build Windows codec runtime from the locked original sources
+        if: runner.os == 'Windows'
+        shell: msys2 {0}
+        run: |
+          python -u scripts/runtime-source/acquire_sources.py --cache-dir codec-sources --extract
+          python -u scripts/runtime-source/build_runtime.py --platform windows-x86_64 --sources codec-sources --work-dir codec-build --destination runtime --jobs 4
+      - name: Build Linux codec runtime from the locked original sources
+        if: runner.os == 'Linux'
+        run: |
+          python3 -u scripts/runtime-source/acquire_sources.py --cache-dir codec-sources --extract
+          python3 -u scripts/runtime-source/build_runtime.py --platform linux-x86_64 --sources codec-sources --work-dir codec-build --destination runtime --jobs 4
+      - name: Fetch locked application dependency archives
+        run: cargo +1.99.0 fetch --locked
+      - name: Collect exact target Rust, font and compiler notices
+        run: python -u scripts/collect_binary_notices.py --target ${{ matrix.rust_target }} --toolchain 1.99.0 --output binary-notices
+      - name: Validate all source and packaging integrity tests
+        run: python -m unittest discover -s scripts/runtime-source -p 'test_*.py' -v
+      - name: Validate native builder contract
+        run: python scripts/runtime-source/build_runtime.py --self-test
+      - name: Validate notice collector
+        run: python -m unittest discover -s scripts -p test_binary_notices.py -v
+      # Rust uses the MSVC host shell, not the MSYS GNU linker environment.
+      - name: Native Windows application, media and rendered GUI acceptance
+        if: runner.os == 'Windows'
+        env:
+          WGPU_BACKEND: dx12
+          NOVA_WGPU_FORCE_FALLBACK: '1'
+        run: python -u scripts/run_validation.py --platform windows-x86_64 --runtime runtime --report-dir validation/windows-x86_64 --toolchain 1.99.0 --source-only
+      - name: Native Linux application, media and rendered GUI acceptance
+        if: runner.os == 'Linux'
+        env:
+          WGPU_BACKEND: vulkan
+          LIBGL_ALWAYS_SOFTWARE: '1'
+          VK_ICD_FILENAMES: /usr/share/vulkan/icd.d/lvp_icd.x86_64.json
+        run: xvfb-run -a -s '-screen 0 1440x1000x24' python3 -u scripts/run_validation.py --platform linux-x86_64 --runtime runtime --report-dir validation/linux-x86_64 --toolchain 1.99.0 --source-only
+      - name: Assemble and verify corresponding media sources
+        run: python scripts/runtime-source/package_sources.py --cache codec-sources --destination source-stage --output dist/Nova-Flux-2.3.1-FFmpeg-sources.zip
+      - name: Package matched Windows application
+        if: runner.os == 'Windows'
+        run: python scripts/package_verified.py --platform windows-x86_64 --runtime runtime --notices binary-notices --binary target/release/nova-flux.exe --source-bundle dist/Nova-Flux-2.3.1-FFmpeg-sources.zip --destination dist/packages
+      - name: Verify extracted Windows package and native rendering
+        if: runner.os == 'Windows'
+        env:
+          WGPU_BACKEND: dx12
+          NOVA_WGPU_FORCE_FALLBACK: '1'
+        run: python scripts/check_verified_package.py --platform windows-x86_64 --archive dist/packages/Nova-Flux-2.3.1-windows-x86_64.zip --report-dir validation/windows-extracted
+      - name: Package matched Linux application
+        if: runner.os == 'Linux'
+        run: python scripts/package_verified.py --platform linux-x86_64 --runtime runtime --notices binary-notices --binary target/release/nova-flux --source-bundle dist/Nova-Flux-2.3.1-FFmpeg-sources.zip --destination dist/packages
+      - name: Verify extracted Linux package and native rendering
+        if: runner.os == 'Linux'
+        env:
+          WGPU_BACKEND: vulkan
+          LIBGL_ALWAYS_SOFTWARE: '1'
+          VK_ICD_FILENAMES: /usr/share/vulkan/icd.d/lvp_icd.x86_64.json
+        run: xvfb-run -a -s '-screen 0 1440x1000x24' python scripts/check_verified_package.py --platform linux-x86_64 --archive dist/packages/Nova-Flux-2.3.1-linux-x86_64.tar.gz --report-dir validation/linux-extracted
+      - name: Retain matched private runtimes, binaries, notices and evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: matched-${{ matrix.platform }}-${{ github.run_attempt }}
+          retention-days: 3
+          if-no-files-found: warn
+          include-hidden-files: true
+          path: |
+            runtime/
+            binary-notices/
+            validation/
+            codec-build/logs/
+            target/release/nova-flux
+            target/release/nova-flux.exe
+            dist/*.zip
+            dist/*.sha256
+            dist/packages/*.zip
+            dist/packages/*.tar.gz
+            dist/packages/*.sha256

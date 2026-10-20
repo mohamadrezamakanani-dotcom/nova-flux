@@ -1,0 +1,336 @@
+{
+  "files": [
+    {
+      "bytes": 36648,
+      "path": "19a620e694cd7a74f8a539d13192d752f6f5eb9a69cb4564507fda848b7d2dcb",
+      "sha256": "c31053c32ebf536c68d8132c037e0f7fe103a4f7c00d52905810fdd7ccbd5b01",
+      "url": "https://api.github.com/repos/AccessKit/accesskit/git/trees/1bbcf100942bac96c2c3a4a91cb67b0b20201a24?recursive=1"
+    },
+    {
+      "bytes": 41848,
+      "path": "20577be3f2446ac55fff1f878ac49567e3a0ffa8f98ba35f1909c5ea9114bc1a",
+      "sha256": "7f2c300cb45695eaf2e47acc42dd844e1a5a4ae6e3dfb250ffac57f9981853ae",
+      "url": "https://api.github.com/repos/AccessKit/accesskit/git/trees/a55d3e1a18bb9ef0e4bccc9083fb13c3e0ad8969?recursive=1"
+    },
+    {
+      "bytes": 41849,
+      "path": "8345de7db27ea2cd650f6af98342c263776f394acf20763171f3e20ba3930e5a",
+      "sha256": "74c0fdd57e335d85f079550db7301178a7e194890a7bae029f506c948f698c3f",
+      "url": "https://api.github.com/repos/AccessKit/accesskit/git/trees/c88605b96d04431f9c3c792464a0f2f253480e94?recursive=1"
+    },
+    {
+      "bytes": 41593,
+      "path": "329ec653ed52220a5fb9bca5f885c8ded74be872ac2fd05a25e9e78e75a87dc3",
+      "sha256": "c3313e9aff0f5bc678ee232bdd94219087a52fe8097e0a2c9bf6bf316b56f382",
+      "url": "https://api.github.com/repos/AccessKit/accesskit/git/trees/f40dfc01a0c0e76de535969f82fb35e19513737d?recursive=1"
+    },
+    {
+      "bytes": 5366,
+      "path": "c1bbadd38f7a46cdbedc365ac229b8329936bb328efba7e19cec7e1dcea5fcde",
+      "sha256": "0b6097c58415f2c78356711b3c3e3bf91c86903af10ab62563e886d9cad3a84a",
+      "url": "https://api.github.com/repos/DoumanAsh/clipboard-win/git/trees/3b27cf2bfd1adcfa6e0264eb51c1025ddaf0f342?recursive=1"
+    },
+    {
+      "bytes": 9723,
+      "path": "dec3101d19ad55368e7aeddf97a1fa44b7eefbf3d1385006a2b4d32fe70d79b8",
+      "sha256": "9e0d31d55de8d192f3418f1f4facf8009957c48ae5062d38e710de34884ea4f1",
+      "url": "https://api.github.com/repos/aclysma/profiling/git/trees/8271551172eb6fa4cba47369aedd93790c623df9?recursive=1"
+    },
+    {
+      "bytes": 21728,
+      "path": "e0b10820a538f7cb408d65eb5fcd6adbc1b6fb611432d56803e69872b72ddcf4",
+      "sha256": "9c01dacc3c5622397895cf4d6db860789929fc29477654b4df8208154b028839",
+      "url": "https://api.github.com/repos/brendanzab/gl-rs/git/trees/ea503e8d5fb6d73c6030e6191ce738cd3bf3433e?recursive=1"
+    },
+    {
+      "bytes": 21728,
+      "path": "43c9068112e8feffda89cc3d316c9bbd797d98b98380e0304f9e242a92d13332",
+      "sha256": "34ec9b22b326ed2a957f9257aeeb2ef3e2835cd1d42e8684ac32820c1e3dfcd2",
+      "url": "https://api.github.com/repos/brendanzab/gl-rs/git/trees/f150967b1c44ae888e6676f93f639ebc82771bdc?recursive=1"
+    },
+    {
+      "bytes": 225716,
+      "path": "d6959ca335962b6e6977ba8172c04779b3c93a455f5fb9b7c2224203d3331690",
+      "sha256": "7ad6f1e58707b9c8f0f45d300763fd86ea796a35a0cb9d089e14fcf0acc750a6",
+      "url": "https://api.github.com/repos/emilk/egui/git/trees/49682f8baa058bf49e011035cfbd6e825f88a5ef?recursive=1"
+    },
+    {
+      "bytes": 24589,
+      "path": "61e616e4fb79cc82eb90138192dffbec4503923876ff709c8f37e2f8bdcbb1d8",
+      "sha256": "b370d17fede5eb040594790a2533e19ecea5786f41d400178ab633dc0371f14a",
+      "url": "https://api.github.com/repos/gfx-rs/rspirv/git/trees/8afc3d0ac8e158128cd1410bb2e4b4c26ab11bb4?recursive=1"
+    },
+    {
+      "bytes": 302589,
+      "path": "c9630a141c8c90c8eb9b7cbc5fc11fec8d643b5676b39f22a4672a6180f821c5",
+      "sha256": "63403e8fe0144c7012bfe526588648f90ccdf061017cefb36e1c2adc520612ab",
+      "url": "https://api.github.com/repos/madsmtm/objc2/git/trees/4fc083f1c6d6784577e38b0ee8dbd344481e2fd2?recursive=1"
+    },
+    {
+      "bytes": 302589,
+      "path": "59202dd9b70ddf27d9575e7be82331f5eb083b3fa3f3d0ee028bf4dbe11c9ba8",
+      "sha256": "2cfefab7a15ef02a036cd1c7c12fda72c6a159df740d92a069ad02c422c56ee1",
+      "url": "https://api.github.com/repos/madsmtm/objc2/git/trees/5237cbf081d04ef75a1f6a207b4018e7c1ae7438?recursive=1"
+    },
+    {
+      "bytes": 569765,
+      "path": "d02ac41de9373627bcf0cc0e4b57ab312a45c42764ba6c07bf97a39baeb18b6c",
+      "sha256": "29d093c7bbe1adb45b0207742cb8244ef35115228ff19bf3680c4ae63e55f065",
+      "url": "https://api.github.com/repos/madsmtm/objc2/git/trees/7b1abfd750a2cacaea71d6a56ecfb83cb7de560b?recursive=1"
+    },
+    {
+      "bytes": 539363,
+      "path": "d6b6126c37caa860e215f2e32560fe7a0b788ff7e4880b7310aa90b5f2fe9285",
+      "sha256": "8bc4d010a6c942e2e8391db65b3691c8965e65e5ae6858508acffa07125e1bc1",
+      "url": "https://api.github.com/repos/madsmtm/objc2/git/trees/8852b424193ca41602281b3d7540d7c8ed51e49a?recursive=1"
+    },
+    {
+      "bytes": 396210,
+      "path": "0a8fefe17cfba01b8aa704dca36b53049391a121eac72244589ed582d3c18a1f",
+      "sha256": "1b466589fca908ca290c6dd80eb04bae26b8ecc5a0bf291c15c7c2105553eaa2",
+      "url": "https://api.github.com/repos/madsmtm/objc2/git/trees/8d214f5477365ffcbcbb7de058c86ed9a518efb7?recursive=1"
+    },
+    {
+      "bytes": 538354,
+      "path": "e075886ed61777369636e63145f53bc8078df5642494facff45bcaf302002809",
+      "sha256": "9b27f0dd652b8c076959fa404208ab1a71242345cc5a9dfe4ad322a193b18c60",
+      "url": "https://api.github.com/repos/madsmtm/objc2/git/trees/b4167b582b2f75f9a1be75495c41b765344fd03c?recursive=1"
+    },
+    {
+      "bytes": 539363,
+      "path": "8a3bb1a230c65eb5d9092d8ed5e06277f689df0d4e5ebd4d0b784bb09129f14e",
+      "sha256": "8b8e66525b9a25eebfcca3c8aa1679636b2548c7c1cc6a88304862c87df67d3f",
+      "url": "https://api.github.com/repos/madsmtm/objc2/git/trees/d7d2fa23ceaa5e6096c923b081040e5d81b3b9df?recursive=1"
+    },
+    {
+      "bytes": 302589,
+      "path": "ac9caf3c84226d300df82de68a8dd7e24465e3f501f977d28d18091f79f0e5b6",
+      "sha256": "f5b32d2d501a959f6220798221fdeb7bffb42b32c1f1b3ba3a9816634d03bb09",
+      "url": "https://api.github.com/repos/madsmtm/objc2/git/trees/e282618be4c3a3b9542957e0c8540e9588472ce8?recursive=1"
+    },
+    {
+      "bytes": 9723,
+      "path": "40242685c4e46ae7c74ba0fc1ce2c194de81298bec57b9e05382c02ff3c2fa2c",
+      "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+      "url": "https://raw.githubusercontent.com/AccessKit/accesskit/1bbcf100942bac96c2c3a4a91cb67b0b20201a24/LICENSE-APACHE"
+    },
+    {
+      "bytes": 1023,
+      "path": "6e44ef40ffe8b9253d4c95db84b7568a65e8f58f34514de4574426e0bc0a0346",
+      "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+      "url": "https://raw.githubusercontent.com/AccessKit/accesskit/1bbcf100942bac96c2c3a4a91cb67b0b20201a24/LICENSE-MIT"
+    },
+    {
+      "bytes": 1559,
+      "path": "d8496aca5fc8e33af5696665e093fef763884c58d6da45e340f674d9c326af34",
+      "sha256": "845022e0c1db1abb41a6ba4cd3c4b674ec290f3359d9d3c78ae558d4c0ed9308",
+      "url": "https://raw.githubusercontent.com/AccessKit/accesskit/1bbcf100942bac96c2c3a4a91cb67b0b20201a24/LICENSE.chromium"
+    },
+    {
+      "bytes": 9723,
+      "path": "2ae6c1b95828f0823e5e25aa6229fbb17174bb079baaa248df2e6136d0c5e4fb",
+      "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+      "url": "https://raw.githubusercontent.com/AccessKit/accesskit/a55d3e1a18bb9ef0e4bccc9083fb13c3e0ad8969/LICENSE-APACHE"
+    },
+    {
+      "bytes": 1023,
+      "path": "19d652e7bb163b753f241400c5212fbe12d9df37963ee476445cf9ad7f1bf5c5",
+      "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+      "url": "https://raw.githubusercontent.com/AccessKit/accesskit/a55d3e1a18bb9ef0e4bccc9083fb13c3e0ad8969/LICENSE-MIT"
+    },
+    {
+      "bytes": 1559,
+      "path": "c6a1e6194d407be58ffa883e0331ef99a86aea64d95b4df837d792b36ae8c8d0",
+      "sha256": "845022e0c1db1abb41a6ba4cd3c4b674ec290f3359d9d3c78ae558d4c0ed9308",
+      "url": "https://raw.githubusercontent.com/AccessKit/accesskit/a55d3e1a18bb9ef0e4bccc9083fb13c3e0ad8969/LICENSE.chromium"
+    },
+    {
+      "bytes": 9723,
+      "path": "7c172b28067fe5863f49b3dcc410644261ccc404355c481e91caadd02f825aa5",
+      "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+      "url": "https://raw.githubusercontent.com/AccessKit/accesskit/c88605b96d04431f9c3c792464a0f2f253480e94/LICENSE-APACHE"
+    },
+    {
+      "bytes": 1023,
+      "path": "e124fdbf92ab1638da465bee0e28f58828caede6326e1d78da5633c0b05f2d44",
+      "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+      "url": "https://raw.githubusercontent.com/AccessKit/accesskit/c88605b96d04431f9c3c792464a0f2f253480e94/LICENSE-MIT"
+    },
+    {
+      "bytes": 1559,
+      "path": "b9c9ebb5ae620acd9783a3d66871abcc46f2d8638af31e20e8f574d8683cb428",
+      "sha256": "845022e0c1db1abb41a6ba4cd3c4b674ec290f3359d9d3c78ae558d4c0ed9308",
+      "url": "https://raw.githubusercontent.com/AccessKit/accesskit/c88605b96d04431f9c3c792464a0f2f253480e94/LICENSE.chromium"
+    },
+    {
+      "bytes": 9723,
+      "path": "482447cb337e9690a762f2337a18d7f2bfffd2a4b05522124b2cab8056b6631b",
+      "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+      "url": "https://raw.githubusercontent.com/AccessKit/accesskit/f40dfc01a0c0e76de535969f82fb35e19513737d/LICENSE-APACHE"
+    },
+    {
+      "bytes": 1023,
+      "path": "c81820c7a4eb7f6c818c6cf31a7b478aa01e836108ad064aee00d9c4a7745f70",
+      "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+      "url": "https://raw.githubusercontent.com/AccessKit/accesskit/f40dfc01a0c0e76de535969f82fb35e19513737d/LICENSE-MIT"
+    },
+    {
+      "bytes": 1559,
+      "path": "270b87bf98b0fcc8a07bb937952d43c8245f135e3e5e6d30b3ffb902e4a6b14f",
+      "sha256": "845022e0c1db1abb41a6ba4cd3c4b674ec290f3359d9d3c78ae558d4c0ed9308",
+      "url": "https://raw.githubusercontent.com/AccessKit/accesskit/f40dfc01a0c0e76de535969f82fb35e19513737d/LICENSE.chromium"
+    },
+    {
+      "bytes": 1338,
+      "path": "0cae00e55fb8d2d44c5764dbd1541127e71078037be80763c5f812b7542dfda5",
+      "sha256": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+      "url": "https://raw.githubusercontent.com/DoumanAsh/clipboard-win/3b27cf2bfd1adcfa6e0264eb51c1025ddaf0f342/LICENSE"
+    },
+    {
+      "bytes": 10818,
+      "path": "b1384988c6f4fc9f241191e7486183f6ea6380fe600948ee708938cf17ccf34b",
+      "sha256": "10d30a673cd5e9349bdc02aeb48f14b3386d27d0da32df8f0a555d4aa16aa551",
+      "url": "https://raw.githubusercontent.com/aclysma/profiling/8271551172eb6fa4cba47369aedd93790c623df9/LICENSE-APACHE"
+    },
+    {
+      "bytes": 1093,
+      "path": "0098c5cb00e3d8f0ebf70d886cfc834282c01c8ea9ef3e3f12c0d0b56d38beff",
+      "sha256": "c8167fdeeed46d3f244d3f85c5bf998ce889343691c32be2c61a8bc4b5c08333",
+      "url": "https://raw.githubusercontent.com/aclysma/profiling/8271551172eb6fa4cba47369aedd93790c623df9/LICENSE-MIT"
+    },
+    {
+      "bytes": 11358,
+      "path": "a1c9770fb7c5cfb575bcbbe95f914d71bc07734a6f2f1ca6aa804ce5af35462c",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "url": "https://raw.githubusercontent.com/brendanzab/gl-rs/ea503e8d5fb6d73c6030e6191ce738cd3bf3433e/LICENSE"
+    },
+    {
+      "bytes": 11358,
+      "path": "2708228e0ce054fa330db5e71456128ecc55c8cfe7d9466aab98af19c6709471",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "url": "https://raw.githubusercontent.com/brendanzab/gl-rs/f150967b1c44ae888e6676f93f639ebc82771bdc/LICENSE"
+    },
+    {
+      "bytes": 10850,
+      "path": "dc702ee88e07d7279c02acb198821708cd2b561cb22649a6cd38c1a97d9f6d0f",
+      "sha256": "8173d5c29b4f956d532781d2b86e4e30f83e6b7878dce18c919451d6ba707c90",
+      "url": "https://raw.githubusercontent.com/emilk/egui/49682f8baa058bf49e011035cfbd6e825f88a5ef/LICENSE-APACHE"
+    },
+    {
+      "bytes": 1092,
+      "path": "0227a9e04d569513979dba6d4cd02be25e7d15e77eb09d57aae8b71cfca7f3ee",
+      "sha256": "95ca92f5f8ea5231f1580b3a2a799e8260af3114b900e1def5355a7f44bcf60c",
+      "url": "https://raw.githubusercontent.com/emilk/egui/49682f8baa058bf49e011035cfbd6e825f88a5ef/LICENSE-MIT"
+    },
+    {
+      "bytes": 3734,
+      "path": "a940220c542b9c37003dedffb59169751022179fdbe82e639fb3c6cc99b1f112",
+      "sha256": "47c0cccbeec7e8614548cc485588b28149e7874188df5f41b36efebcee285c87",
+      "url": "https://raw.githubusercontent.com/emilk/egui/49682f8baa058bf49e011035cfbd6e825f88a5ef/crates/epaint_default_fonts/fonts/Hack-Regular.txt"
+    },
+    {
+      "bytes": 4301,
+      "path": "ba35299cf087d707650da2ce8255616beed47615805a554a9340cf2a48f04f1f",
+      "sha256": "6a73f9541c2de74158c0e7cf6b0a58ef774f5a780bf191f2d7ec9cc53efe2bf2",
+      "url": "https://raw.githubusercontent.com/emilk/egui/49682f8baa058bf49e011035cfbd6e825f88a5ef/crates/epaint_default_fonts/fonts/OFL.txt"
+    },
+    {
+      "bytes": 4673,
+      "path": "d78c8a8f6b81f91a7061c1434eece2d685f70941f36f04293fee17004058703b",
+      "sha256": "2f0015108d68627bd788d313f529c21ff4da2c2c42a5e1f3883acc83480f9002",
+      "url": "https://raw.githubusercontent.com/emilk/egui/49682f8baa058bf49e011035cfbd6e825f88a5ef/crates/epaint_default_fonts/fonts/UFL.txt"
+    },
+    {
+      "bytes": 1069,
+      "path": "7ef439c8a0b5b638e1bc9335d3f6e77de8d2a59bc075524e085cf06fb6c8cca5",
+      "sha256": "b9d2c1d909aa149996fd4c91dcb92b2362a04431640c1d200959da94caf8cde1",
+      "url": "https://raw.githubusercontent.com/emilk/egui/49682f8baa058bf49e011035cfbd6e825f88a5ef/crates/epaint_default_fonts/fonts/emoji-icon-font-mit-license.txt"
+    },
+    {
+      "bytes": 11358,
+      "path": "b23bc8f47b0b09f45982841c8e8047154191cffbb5fb9f2ea1927275f357525a",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "url": "https://raw.githubusercontent.com/gfx-rs/rspirv/8afc3d0ac8e158128cd1410bb2e4b4c26ab11bb4/LICENSE"
+    },
+    {
+      "bytes": 1643,
+      "path": "53b8c15a44e154285b77cdb0916b4c6c79e5ab0369465b161546c2189a78922c",
+      "sha256": "bf4da21bd20bcfb5b60b7ecc67fa864a79be049e21d6178076887f178dd6c71a",
+      "url": "https://raw.githubusercontent.com/google/angle/7403dd2cd3764fe96660fe09892e764e9ae1dbca/LICENSE"
+    },
+    {
+      "bytes": 1066,
+      "path": "623fbe5329cb5fbb746bde12cbf85091a28c93a7b5e0620154766fd9d51168a4",
+      "sha256": "e353f37b12aefbb9f9b29490e837cfee05d9bda70804b3562839a3285c1df1e5",
+      "url": "https://raw.githubusercontent.com/madsmtm/objc2/4fc083f1c6d6784577e38b0ee8dbd344481e2fd2/LICENSE.txt"
+    },
+    {
+      "bytes": 1066,
+      "path": "311fa620aca5cc867391dcb0252d4174801ba8f7beac96c962fd88e8bd7ec98e",
+      "sha256": "e353f37b12aefbb9f9b29490e837cfee05d9bda70804b3562839a3285c1df1e5",
+      "url": "https://raw.githubusercontent.com/madsmtm/objc2/5237cbf081d04ef75a1f6a207b4018e7c1ae7438/LICENSE.txt"
+    },
+    {
+      "bytes": 1339,
+      "path": "ac8b04c1d4ac211878a88b16454949a84432bedef37a5adf2945593bcd0176bd",
+      "sha256": "7f976f7e9cb2d87df7230606feb932c3f21ac0e664045a775b600046ff850c54",
+      "url": "https://raw.githubusercontent.com/madsmtm/objc2/7b1abfd750a2cacaea71d6a56ecfb83cb7de560b/LICENSE.md"
+    },
+    {
+      "bytes": 8610,
+      "path": "11930bb41fd0bd3e21f0d76a41ba5a72d45014fa7fbd90ae2e9732cdf0e2d45c",
+      "sha256": "259b22f571b54fed25f68ec5abd8eda223e7b0547a806f13ba797a0eabecd64f",
+      "url": "https://raw.githubusercontent.com/madsmtm/objc2/7b1abfd750a2cacaea71d6a56ecfb83cb7de560b/framework-crates/objc2-foundation/src/copying.rs"
+    },
+    {
+      "bytes": 618,
+      "path": "f5c2193bd2dcd0adda0b4fee7f179fbafb6e1ea357432cb9e58e23cc0588fe79",
+      "sha256": "23d608079a47693a26dfc8a5cb01894ad0136a50714d46221d9380aa4a4b4423",
+      "url": "https://raw.githubusercontent.com/madsmtm/objc2/7b1abfd750a2cacaea71d6a56ecfb83cb7de560b/framework-crates/objc2-foundation/src/tests/copying.rs"
+    },
+    {
+      "bytes": 1339,
+      "path": "1327997696f808ae8aab72fa5dcb93c092b93712ba0b6da2cec62e4ca30274c1",
+      "sha256": "7f976f7e9cb2d87df7230606feb932c3f21ac0e664045a775b600046ff850c54",
+      "url": "https://raw.githubusercontent.com/madsmtm/objc2/8852b424193ca41602281b3d7540d7c8ed51e49a/LICENSE.md"
+    },
+    {
+      "bytes": 1339,
+      "path": "42fe913290d694df0d8fca2bd80e046e8041bf76107ebd5f429d65ba29ca0c60",
+      "sha256": "7f976f7e9cb2d87df7230606feb932c3f21ac0e664045a775b600046ff850c54",
+      "url": "https://raw.githubusercontent.com/madsmtm/objc2/8d214f5477365ffcbcbb7de058c86ed9a518efb7/LICENSE.md"
+    },
+    {
+      "bytes": 1339,
+      "path": "0094da2c101a3d4b8663672da025a0062d30daba33ce4d74f8cb84995d1245eb",
+      "sha256": "7f976f7e9cb2d87df7230606feb932c3f21ac0e664045a775b600046ff850c54",
+      "url": "https://raw.githubusercontent.com/madsmtm/objc2/b4167b582b2f75f9a1be75495c41b765344fd03c/LICENSE.md"
+    },
+    {
+      "bytes": 1339,
+      "path": "d93ed2957f9747cb8b5a877b519e328d4152cea8b7569810b380f3aa098571d8",
+      "sha256": "7f976f7e9cb2d87df7230606feb932c3f21ac0e664045a775b600046ff850c54",
+      "url": "https://raw.githubusercontent.com/madsmtm/objc2/d7d2fa23ceaa5e6096c923b081040e5d81b3b9df/LICENSE.md"
+    },
+    {
+      "bytes": 1066,
+      "path": "5e0df21191cf412d2f0b932840f46a3acf59ec4af514842f3b7f4803115e1c80",
+      "sha256": "e353f37b12aefbb9f9b29490e837cfee05d9bda70804b3562839a3285c1df1e5",
+      "url": "https://raw.githubusercontent.com/madsmtm/objc2/e282618be4c3a3b9542957e0c8540e9588472ce8/LICENSE.txt"
+    },
+    {
+      "bytes": 3079,
+      "path": "64902e7766690bcbac71e439098ab31a87143d9c0593043692c3066f5b207a00",
+      "sha256": "6ef40ce213364039bb992742f8ca4ee2660f9f32669707f403cdd0f0b035a098",
+      "url": "https://raw.githubusercontent.com/madsmtm/objc2/e282618be4c3a3b9542957e0c8540e9588472ce8/framework-crates/objc2-foundation/src/copying.rs"
+    },
+    {
+      "bytes": 618,
+      "path": "99f2f3b15f2415ef7c829cf165eee545d81a5d34ac00e86af2b1f253556d3304",
+      "sha256": "23d608079a47693a26dfc8a5cb01894ad0136a50714d46221d9380aa4a4b4423",
+      "url": "https://raw.githubusercontent.com/madsmtm/objc2/e282618be4c3a3b9542957e0c8540e9588472ce8/framework-crates/objc2-foundation/src/tests/copying.rs"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Exact public upstream license files and Git tree metadata used by the locked Rust dependency notice collector; no credentials or local source paths"
+}
