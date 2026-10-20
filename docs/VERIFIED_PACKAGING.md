@@ -18,7 +18,9 @@ python3 scripts/package_verified.py \
 Use `windows-x86_64` or `linux-x86_64` on its native host, supplying that target's
 binary, runtime, and notices. Windows packaging can run from native Python in
 PowerShell; MSYS2's `objdump.exe` is located on PATH or under
-`C:/msys64/ucrt64/bin/`. macOS needs `otool` and `codesign`; Linux needs `readelf`.
+`C:/msys64/ucrt64/bin/`, or the runner's temporary MSYS2 installation. Set
+`NOVA_OBJDUMP` to an explicit existing tool path for another installation.
+macOS needs `otool` and `codesign`; Linux needs `readelf`.
 The destination must not exist. A failed package is not published and an
 existing release is never overwritten; select a fresh destination for a retry.
 

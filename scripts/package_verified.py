@@ -182,6 +182,22 @@ def verify_runtime(runtime, platform, root=ROOT):
     return value, binding
 
 
+def windows_objdump():
+    configured = os.environ.get("NOVA_OBJDUMP")
+    if configured:
+        if not Path(configured).is_file():
+            raise ValueError("NOVA_OBJDUMP does not identify an existing inspection tool")
+        return str(Path(configured).resolve())
+    candidates = [shutil.which("objdump")]
+    if os.environ.get("RUNNER_TEMP"):
+        candidates.append(str(Path(os.environ["RUNNER_TEMP"]) / "msys64/ucrt64/bin/objdump.exe"))
+    candidates.append("C:/msys64/ucrt64/bin/objdump.exe")
+    for candidate in candidates:
+        if candidate and Path(candidate).is_file():
+            return str(Path(candidate).resolve())
+    raise ValueError("MSYS2 objdump was not found; add its bin directory to PATH or set NOVA_OBJDUMP")
+
+
 def application_imports(binary, platform):
     if platform == "macos-arm64":
         output = subprocess.check_output(["otool", "-L", str(binary)], text=True)
@@ -195,7 +211,7 @@ def application_imports(binary, platform):
         system = builder.LINUX_SYSTEM_LIBRARIES | {"libgcc_s.so.1", "libstdc++.so.6", "libxkbcommon.so.0", "libwayland-client.so.0", "libX11.so.6", "libxcb.so.1"}
         approved = lambda item: item in system
     else:
-        objdump = shutil.which("objdump") or "C:/msys64/ucrt64/bin/objdump.exe"
+        objdump = windows_objdump()
         output = subprocess.check_output([objdump, "-p", str(binary)], text=True)
         imports = re.findall(r"^\s*DLL Name:\s*(\S+)", output, re.M)
         extra = {"d3dcompiler_47.dll", "imm32.dll", "comdlg32.dll", "comctl32.dll", "dwmapi.dll", "hid.dll", "opengl32.dll", "rpcrt4.dll", "uxtheme.dll", "winspool.drv", "wsock32.dll", "cfgmgr32.dll", "propsys.dll", "shcore.dll", "uiautomationcore.dll", "powrprof.dll", "combase.dll", "bcryptprimitives.dll"}

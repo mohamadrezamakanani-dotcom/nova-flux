@@ -76,11 +76,16 @@ class VerifiedPackagingTests(unittest.TestCase):
         self.assertIsNotNone(package, "verified packager has not been implemented")
         # Native inspection is an external tool boundary; exercise the real
         # DLL parser and allowlist while supplying its captured text output.
-        with mock.patch.object(package.subprocess, "check_output", return_value="    DLL Name: KERNEL32.dll\n    DLL Name: VCRUNTIME140.dll\n"):
+        with mock.patch.object(package, "windows_objdump", return_value="objdump"), mock.patch.object(package.subprocess, "check_output", return_value="    DLL Name: KERNEL32.dll\n    DLL Name: VCRUNTIME140.dll\n"):
             with self.assertRaisesRegex(ValueError, "unapproved"):
                 package.application_imports(self.root / "nova-flux.exe", "windows-x86_64")
-        with mock.patch.object(package.subprocess, "check_output", return_value="    DLL Name: KERNEL32.dll\n    DLL Name: USER32.dll\n"):
+        with mock.patch.object(package, "windows_objdump", return_value="objdump"), mock.patch.object(package.subprocess, "check_output", return_value="    DLL Name: KERNEL32.dll\n    DLL Name: USER32.dll\n"):
             self.assertEqual(package.application_imports(self.root / "nova-flux.exe", "windows-x86_64"), ["KERNEL32.dll", "USER32.dll"])
+
+    def test_windows_inspection_finds_msys2_in_runner_temporary_directory(self):
+        tool = self.write("msys64/ucrt64/bin/objdump.exe", b"inspection fixture")
+        with mock.patch.dict(os.environ, {"RUNNER_TEMP": str(self.root)}, clear=True), mock.patch.object(package.shutil, "which", return_value=None):
+            self.assertEqual(package.windows_objdump(), str(tool.resolve()))
 
     def test_archived_package_roundtrip_detects_changed_extracted_file(self):
         self.assertIsNotNone(package, "verified packager has not been implemented")
