@@ -32,7 +32,7 @@ For video, the quality cards choose distinct **maximum sizes relative to each so
 | Balanced | 65% of source bytes |
 | High quality | 85% of source bytes |
 
-These percentages are deliberate size goals, not perceptual-quality scores or fabricated predictions. The interface labels them as maximums. CPU encoding uses two-pass bitrate allocation; compatible hardware encoding uses measured feedback and software fallback. The completed file is measured before publication and must fit the applied maximum. Exact output bytes and reduction are displayed afterwards. A very small or already minimal source may not fit a requested preset; that fails clearly and publishes no oversized or resized file.
+These percentages are deliberate size goals, not perceptual-quality scores or fabricated predictions. The interface labels them as maximums. Smaller presets can reduce visible quality and audio fidelity; retaining dimensions does not retain original quality. CPU encoding uses two-pass bitrate allocation; compatible hardware encoding uses measured feedback and software fallback. The completed file is measured before publication and must fit the applied maximum. Exact output bytes and reduction are displayed afterwards. A very small or already minimal source may not fit a requested preset; that fails clearly and publishes no oversized or resized file.
 
 **Video dimensions are locked to Original.** Compression does not resize, pad, lower frame rate or shorten the selected streams. Orientation and pixel aspect ratio are verified where known. Unsupported geometry/rotation combinations fail clearly rather than silently changing the image. Old saved resize settings reset to Original.
 

@@ -181,12 +181,14 @@ mod tests {
                     std::process::id(),
                     NEXT_DIRECTORY.fetch_add(1, Ordering::Relaxed),
                 ));
-                let mut directory = fs::DirBuilder::new();
+                let directory = fs::DirBuilder::new();
                 #[cfg(unix)]
-                {
+                let directory = {
                     use std::os::unix::fs::DirBuilderExt;
+                    let mut directory = directory;
                     directory.mode(0o700);
-                }
+                    directory
+                };
                 match directory.create(&path) {
                     Ok(()) => return Self(path),
                     Err(error) if error.kind() == io::ErrorKind::AlreadyExists => continue,
@@ -252,11 +254,12 @@ mod tests {
         fs::create_dir_all(path.parent().unwrap()).unwrap();
         fs::write(&path, b"previous process no longer exists").unwrap();
         let owner = guard(acquire_at(&path).unwrap());
+        // Windows locks also deny reads through another handle in this process.
+        drop(owner);
         assert_eq!(
             fs::read(&path).unwrap(),
             b"previous process no longer exists"
         );
-        drop(owner);
         let _next_owner = guard(acquire_at(&path).unwrap());
     }
 

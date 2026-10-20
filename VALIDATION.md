@@ -1,47 +1,32 @@
-# Nova Flux 2.2 validation
+# Nova Flux 2.3 validation
 
-Validated locally on Apple Silicon macOS. This report separates automated engine tests, native UI acceptance and distribution checks. The old web preview and 2.1 heuristic/resolution screenshots do not describe this release.
+Evidence date: 2026-10-20. A passing check applies to its stated host and scope.
 
-## Corrections
+| Check | Host | Status | Evidence |
+| --- | --- | --- | --- |
+| Full Rust suite, including real codec acceptance tests | Local Apple Silicon macOS | PASS: 100 tests, 0 failures | All-target locked tests with ignored acceptance tests included, single test thread |
+| All-target Clippy, warnings denied | Local Apple Silicon macOS | PASS | Locked dependencies, current source |
+| Python extraction, packaging and validation boundaries | Local macOS | PASS: 17 tests | Unittest discovery under scripts |
+| Native Windows build, codec tests and rendered GUI | Windows Server 2022 x86_64 CI | IN PROGRESS | Independent native validation run |
+| Native Linux build, codec tests and rendered GUI | Ubuntu 22.04 x86_64 CI | IN PROGRESS | Independent native validation run |
+| Optimized 2.3 macOS application and native acceptance | Local Apple Silicon macOS | IN PROGRESS | Separate from source tests |
 
-- Quality numbers are obtained from real, cancellable sample encodes using the production profile. Short sources are measured whole; longer re-encodes use three timeline positions. Stream copy uses a complete, cancellable private remux without seek/trim or extrapolation, under the same 15-second deadline. Missing or failed measurement shows Measuring or Unavailable, never an invented numerical fallback. Queue totals require every queued file.
-- Sample size extrapolation remains approximate. Sample spread is observed evidence, not a guaranteed interval; unsampled scenes and encoder fallback can change full-file size. Final output bytes are measured.
-- Target size is a per-file maximum shown once in its own section, with exact bytes. It is not a quality/resolution prediction. Successful outputs must be within the byte cap; otherwise no output is published.
-- Video dimensions and cadence are preserved in ordinary and target modes. No scale/padding/frame-rate-reduction filter is used. Old saved resize settings are reset to Original. Infeasible caps fail clearly. Odd dimensions use compatible software encoders; unsupported AVI geometry fails instead of changing dimensions.
-- Queued sources are revalidated in a cancellable background worker, before conversion and before publication. Replaced/mutated sources invalidate measurements. Source files remain untouched. Each published filename is new and atomic.
-- A per-user OS file lock prevents duplicate native GUI instances across app copies and activates the existing instance. Crash-stale file contents do not retain the OS lock.
+## What the Mac tests verify
 
-## Automated verification
+The Rust suite comprises 31 library tests, 13 desktop tests, 3 file-boundary tests, 6 engine tests, 19 estimate tests, 7 performance tests, 3 portable-platform tests, 9 geometry tests and 9 target-size tests. Real codec acceptance tests are explicitly enabled; a skipped acceptance test is not counted as passing.
 
-**85 tests passed, zero failed or ignored:** 22 library, 13 desktop/single-instance helpers, 3 input/queue boundary, 6 engine, 19 measured-estimate/source-refresh, 7 performance, 7 geometry/cadence and 8 target-size tests. The final full run includes long-GOP copy accuracy and incomplete-remux rejection for video and audio. **All-target Clippy passed with warnings denied**, and formatting passed. Results are recorded in docs/evidence. Real-media tests use the bundled FFmpeg/ffprobe, not mocks. Coverage includes all eleven output formats and three encoding qualities, compatible/incompatible stream copy, audio precision, original geometry/cadence, strict byte limits, cancellation/cleanup, concurrent publication, source mutation, measured estimate behavior and calibration fallback.
+The suite exercises every offered output format, actual source-relative video compression, exact explicit limits, cancellation/cleanup, immutable inputs, output collision protection, remux duration and full-file size measurement, and production/calibration profile parity. Geometry tests cover odd dimensions, high frame rates, variable timestamps, display aspect ratio and supported rotation. Unsupported geometry fails without silently resizing.
 
-Reproduce from the source archive:
+Two generated four-second fixtures demonstrate real preset reductions. One efficient 183,680-byte input produced 70,268 / 119,228 / 151,384 bytes for Compact / Balanced / High quality, below the respective 73,472 / 119,392 / 156,128-byte maxima. A 1,800,795-byte fixture produced 708,015 / 1,123,390 / 1,475,247 bytes, below 720,318 / 1,170,516 / 1,530,675. These retain 640×360, 25 fps and 100 frames. They are examples, not universal compression ratios or perceptual-quality guarantees. A minimal source fails clearly when the requested maximum cannot fit.
 
-```sh
-NOVA_TEST_RUNTIME="$PWD/runtime" cargo test --locked -- --include-ignored --test-threads=1
-cargo clippy --all-targets --locked -- -D warnings
-cargo build --release --locked
-python3 scripts/package.py --runtime runtime --destination 'Nova Flux.app'
-```
+An explicit 200,000-byte lossy-audio limit produced a valid 163,048-byte MP3 even though the source itself was smaller than the requested maximum. Explicit limits therefore remain the user's exact limit and are not accidentally replaced by preset percentages.
 
-## Native macOS acceptance
+## Limits and distribution
 
-The installed 2.2.0 window imported a generated **8,987,163-byte, 1920×1080, 30 fps** source. Quality cards finished measuring and displayed distinct estimates: Compact approximately 806.5 KB, Balanced 2.68 MB, High 3.75 MB, Stream copy 8.99 MB. The output panel opened/closed correctly without blocking measurement.
+Video quality cards show verified source-relative maxima, not exact final-size predictions. Lossy compression can reduce both video and audio fidelity. Completed outputs show actual bytes. Original geometry, frame cadence and selected duration remain fixed.
 
-Starting a real conversion through the native window with a **1,000,000-byte maximum** produced **967,193 bytes**, a measured **89.2% reduction**, through Apple VideoToolbox after local CPU/hardware comparison. Independent probing and full decoding confirmed **1920×1080, 30 fps, 90 decoded frames, 3.000-second video, 3.008-second audio/container duration**. The source SHA-256 stayed unchanged. The byte cap was not presented as a quality estimate. The destination was a private test folder; user preferences were backed up and restored.
+Native CI rendering is narrower than manual interaction on a physical desktop. Windows/Linux GPU encoding, every desktop dialog, every distribution/driver and all processor architectures are not established by these checks. See [platform scope](docs/CROSS_PLATFORM.md).
 
-Launching a second installed executable while the native queue contained one file exited successfully without an activation error. The primary PID and queue remained; only one GUI process existed. The app subsequently quit and reopened correctly. The legacy saved 480p setting loaded as Original, and the user's output folder and 80 MB size preference were restored. The exact user source was reimported for visible numeric verification; its complete 40-minute timeline was not re-encoded as part of this UI test.
+The public repository contains MIT application source and no FFmpeg runtime binaries. Private CI packages are not public releases. Complete corresponding runtime/dependency sources remain outstanding before public self-contained application packages can be distributed. The local Mac app is ad-hoc signed, not Apple-notarized.
 
-The optimized release build, bundled-runtime diagnostic, deep/strict ad-hoc signature verification and all 38 runtime manifest byte counts/hashes passed. Seven known installed app copies were updated to the same 2.2.0 binary; previous copies were kept as recoverable non-app backups. Original Nova Converter.app's asar hash remained unchanged.
-
-## Numeric source check
-
-The source shown in the user's screenshot was independently inspected on this Mac. Its current filesystem size and ffprobe size agree at **266,873,590 bytes = 266.873590 MB = approximately 254.51 MiB**. The actual source is 1920×1080 at 25 fps, with a 2425.742222-second container duration. The previously reported 289 MB does not match this exact local file. The final engine measured a complete private stream-copy remux at **265,850,175 bytes** in approximately **0.51 seconds**, without seeking, trimming or extrapolation. The smaller copy omits unselected artwork. This measurement preserves the selected full timeline and is removed afterwards. The final UI is checked against that measurement. Numbers are not adjusted to match a verbal size. Only primary non-artwork video and the first audio stream are selected.
-
-## Practical limits
-
-The Rust UI/queue/planning/process control use native egui/eframe/wgpu; bundled FFmpeg/ffprobe and their native libraries perform encoding. There is no HTML, JavaScript, WebView, upload, cloud account or runtime download. Automatic scheduling compares the implemented CPU and Apple VideoToolbox paths and budgets parallel work against CPU and available memory. It does not prove a mathematical speed optimum on all future devices. Measuring estimates and first-use calibration have a real cost and are cancelled before conversion starts.
-
-Complete-copy measurements need temporary disk space. A real low-disk test returned Unavailable with the underlying storage error, and succeeded after removing this task's disposable generated debug-build cache; user files, source, release binary and installed app were retained.
-
-This local build is arm64 and ad-hoc signed. Intel, other operating systems and Apple notarization have not been validated. Public distribution still requires the appropriate signing/notarization process and review of the bundled GPL/runtime license notices. Tests cannot guarantee every damaged, DRM-protected or unusual media file. Arbitrary non-quarter-turn rotations that cannot be safely preserved are rejected for re-encoding; compatible stream copy can retain them. AVI timestamp precision depends on its representable clock; unreliable AVI header average-frame-rate/count values are not asserted as decoded facts. Queue history is session-only. Subtitle and alternate-audio preservation are outside the current selected-stream contract.
+[Historical 2.2 local validation](docs/validation-2.2.md) is retained separately.

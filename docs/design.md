@@ -1,3 +1,5 @@
+> Historical development notes through version 2.2. Local delivery paths and runtime archives mentioned below are not public source assets. See [current validation](../VALIDATION.md) and [platform status](CROSS_PLATFORM.md).
+
 # Nova Flux design
 
 Latest scope: a Rust-native, English-only replacement for the supplied Nova Converter, with a new icon/UI, every original conversion target, target-size compression and measured automatic performance selection. Earlier Tauri/bilingual prototypes are superseded.

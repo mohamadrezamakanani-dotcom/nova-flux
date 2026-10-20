@@ -57,7 +57,7 @@ def package(target: str, runtime: Path, binary: Path, destination: Path, channel
             executable.chmod(0o755)
         shutil.copytree(runtime, stage / "runtime")
         shutil.copyfile(root / "assets" / "icon.png", stage / "icon.png")
-        for name in ("LICENSE", "LICENSE.txt", "THIRD_PARTY_NOTICES.md"):
+        for name in ("LICENSE", "LICENSE.txt", "THIRD_PARTY.md", "THIRD_PARTY_NOTICES.md"):
             if (root / name).is_file():
                 shutil.copyfile(root / name, stage / name)
         (stage / "PRIVATE_CI_ONLY.txt").write_text(PRIVATE_NOTICE, encoding="utf-8")

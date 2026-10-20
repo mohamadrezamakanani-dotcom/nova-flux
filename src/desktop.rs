@@ -1153,7 +1153,7 @@ impl Desktop {
                 .as_ref()
                 .is_some_and(|worker| !worker.is_finished());
             if VIDEO.contains(&self.preferences.settings.format.as_str()) {
-                small_note(ui, "Compact: up to 40% of source size · Balanced: 65% · High quality: 85%. These are verified maximums at original dimensions; final files can be smaller. Stream copy is measured separately.", self.muted());
+                small_note(ui, "Compact: up to 40% of source size · Balanced: 65% · High quality: 85%. Verified maximums at original dimensions; final files can be smaller. Compression may reduce visible quality and audio fidelity. Stream copy is measured separately.", self.muted());
             } else {
                 small_note(ui, &format!("{} · total for {count} queued {}. Complete-file size can differ from sampled content.", if measuring { "Measuring local samples" } else { "Sample-based estimates" }, if count == 1 { "file" } else { "files" }), self.muted());
             }
@@ -1242,6 +1242,15 @@ impl Desktop {
                     .into(),
             );
         };
+        if quality == "original" {
+            return (
+                format!("≈ {}", size_text(total.bytes)),
+                format!(
+                    "Measured complete remux total for {} file(s): {} bytes. Every selected timeline was copied privately without seeking, trimming or extrapolating samples. Final container bytes are checked after conversion.\n{}",
+                    jobs.len(), grouped_bytes(total.bytes), evidence.join("\n")
+                ),
+            );
+        }
         (format!("≈ {}", size_text(total.bytes)), format!("Sample-based total for {} file(s): approximately {} bytes.\nObserved sample spread projected to the full duration: {}–{}. This is not a guaranteed range; scenes outside the samples may differ. Automatic may choose or fall back to another encoder during conversion. Exact file bytes are measured after conversion.\n{}", jobs.len(), grouped_bytes(total.bytes), size_text(total.lower_bytes), size_text(total.upper_bytes), evidence.join("\n")))
     }
 
