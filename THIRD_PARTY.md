@@ -19,3 +19,9 @@ See https://ffmpeg.org/legal.html for the FFmpeg project's own guidance.
 ## Project icon
 
 The navy/coral loop icon in assets/ was created for this project using local procedural drawing. It is separate from the supplied Nova Converter application's original icon. No original app asset or private media file is included in this source release. Platform font files are read from the user's existing operating system when available; they are not copied into this repository.
+
+## Repository introduction media
+
+The social-preview banner was generated with ImageGen using the project-created icon as an identity reference; it redraws that reference and does not replace the application icon. [Banner provenance](assets/social-preview-provenance.md) records the prompt, processing and hashes.
+
+The [demonstration](docs/DEMO_PROVENANCE.md) uses an actual native application screenshot and generated acceptance media with the verified app output. HyperFrames rendered the composition; its font shapes appear only as rendered pixels, not redistributed font files. It contains no personal media, fabricated application interaction, third-party endorsement or encoding-speed claim. These project-created introduction assets are covered by the application repository's MIT terms; referenced third-party projects keep their own licenses.

@@ -25,6 +25,7 @@ jobs:
       - name: Check documentation checker boundaries
         run: python -B -m unittest discover -s scripts -p test_docs.py -v
       - name: Parse issue forms and chooser safely
-        run: ruby -ryaml -e 'ARGV.each { |f| YAML.safe_load(File.read(f), aliases:false); puts "PASS #{f}" }' .github/ISSUE_TEMPLATE/*.yml
+        run: |
+          ruby -ryaml -e 'ARGV.each { |f| YAML.safe_load(File.read(f), aliases:false); puts "PASS #{f}" }' .github/ISSUE_TEMPLATE/*.yml
       - name: Check whitespace
         run: git diff --check HEAD

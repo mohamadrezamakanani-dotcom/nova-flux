@@ -45,6 +45,16 @@ The UI is native English Rust with egui/eframe/wgpu. FFmpeg/ffprobe are separate
 
 [Full user guide](docs/USER_GUIDE.md) · [Build from source](docs/BUILDING.md)
 
+## Watch a verified conversion sample
+
+![Recorded native interface and verified conversion sample](assets/demo.gif)
+
+This 12-second silent demonstration combines the actual native interface image
+with playback of a generated original and its real app-produced output. It is
+not a live UI recording or an encoding-speed benchmark. The sample retained
+1920×1080 and all 90 frames while fitting a 500,000-byte maximum.
+[Demo source and verification](docs/DEMO_PROVENANCE.md).
+
 ## See it on each platform
 
 <details>
