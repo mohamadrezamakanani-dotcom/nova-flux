@@ -57,6 +57,15 @@ existing instance, while Windows/Linux duplicates exit with a clear message.
 
 ## Matched source builds and acceptance
 
+The public [matched-source workflow](PUBLIC_RELEASE_BUILD.md) now repeats the
+complete native source/runtime/package checks on all three standard hosted
+runners. Public [run 39561785132](https://github.com/mohamadrezamakanani-dotcom/nova-flux/actions/runs/39561785132)
+passed at `cbd04899b78ba81ae2172c08168676b4f9b0e751`, including extracted native
+rendering and common-source aggregation. Independently downloaded packages
+passed checksum, inventory, runtime/source and notice verification. Its
+[retained receipt](evidence/public-build-2.3.1.json) describes fresh validation
+artifacts, separately from the immutable published release record above.
+
 [matched-runtime.yml](../.github/workflows/matched-runtime.yml) builds native
 FFmpeg from nine hash-pinned original archives in a private validation repository.
 It retains exact source, recipe/tool versions, configure options, compiler-support

@@ -1,0 +1,63 @@
+{
+  "application": "Nova Flux",
+  "application_sha256": "3fc9d9ecfcc66d1a293a0fdf6ee4bbfbf0d8eb9b88393ec04438f8ff696220ee",
+  "collision_sentinel_preserved": "PASS",
+  "date": "2026-10-21",
+  "environment": {
+    "architecture": "arm64",
+    "graphics": "Metal",
+    "hardware": "Apple M4",
+    "os": "macOS 27.0.1"
+  },
+  "impossible_1000_byte_limit": "PASS: clear failure, no output saved",
+  "input_bytes_each": 3653251,
+  "input_sources_unchanged": "PASS",
+  "not_run": [
+    "drag/drop",
+    "keyboard-only and screen reader workflow",
+    "cancel during active encoding",
+    "close during active encoding",
+    "physical Windows/Linux desktop"
+  ],
+  "outputs": [
+    {
+      "bytes": 487714,
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "duration": "3.008000",
+      "filename": "sample-one_converted_2.mp4",
+      "frame_rate": "30/1",
+      "frames": 90,
+      "full_decode": "PASS",
+      "sha256": "fc887d8c64f80b54155940f6fc57a5d9aac62a4c4a5ba27ac01667ce9341f7d1"
+    },
+    {
+      "bytes": 487714,
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "duration": "3.008000",
+      "filename": "sample-two_converted.mp4",
+      "frame_rate": "30/1",
+      "frames": 90,
+      "full_decode": "PASS",
+      "sha256": "fc887d8c64f80b54155940f6fc57a5d9aac62a4c4a5ba27ac01667ce9341f7d1"
+    }
+  ],
+  "preferences_restored": "PASS",
+  "queue_restored_empty": "PASS",
+  "scope": "Additional physical Mac interaction using generated media; does not establish unperformed interaction or physical Windows/Linux acceptance.",
+  "source_sha256": "cac0da94a9c73171d02f94464837e24d8bbf9f5b498a474cd238de7a4afc9df5",
+  "status": "PASS",
+  "target_bytes_each": 500000,
+  "temporary_output_cleanup": "PASS",
+  "ui_clear_completed": "PASS",
+  "ui_folder_import": "PASS",
+  "ui_output_settings_toggle": "PASS",
+  "ui_retry": "PASS",
+  "ui_reveal": "PASS",
+  "version": "2.3.1"
+}

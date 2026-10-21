@@ -1,0 +1,293 @@
+{
+  "aggregate_recomputed_locally": "PASS",
+  "aggregation": {
+    "commit": "cbd04899b78ba81ae2172c08168676b4f9b0e751",
+    "package_byte_verification": "Native package bytes were validated upstream; package archives were not downloaded by this aggregation job. Verify downloaded packages against SHA256SUMS.",
+    "platforms": [
+      {
+        "archive": {
+          "bytes": 71314476,
+          "filename": "Nova-Flux-2.3.1-linux-x86_64.tar.gz",
+          "sha256": "718b5deae91b43777146ce6be1e7c385801ab0bba1a75475d05d4896eef05a01"
+        },
+        "native_tests": {
+          "executables": 9,
+          "failed": 0,
+          "ignored": 0,
+          "passed": 100
+        },
+        "package_manifest_sha256": "bbb6fba1723fbad4a5650a5afe3e1da340f1cf59c082faa77924c84a13387dc5",
+        "platform": "linux-x86_64"
+      },
+      {
+        "archive": {
+          "bytes": 70425819,
+          "filename": "Nova-Flux-2.3.1-macos-arm64.zip",
+          "sha256": "26ccbc34788338e7ec630fcbecc65c60a9027c392950450bac9f9fded06016c7"
+        },
+        "native_tests": {
+          "executables": 9,
+          "failed": 0,
+          "ignored": 0,
+          "passed": 100
+        },
+        "package_manifest_sha256": "84ae7dfb8d089cc2d4bdf0d1f45cbb3f4b0891f126a9e58fc36d899094d8bef3",
+        "platform": "macos-arm64"
+      },
+      {
+        "archive": {
+          "bytes": 78461004,
+          "filename": "Nova-Flux-2.3.1-windows-x86_64.zip",
+          "sha256": "9917a8aaff44a3c88e86dc5a26eb6860d2582199d2476a64afc91f06de1a1cce"
+        },
+        "native_tests": {
+          "executables": 9,
+          "failed": 0,
+          "ignored": 0,
+          "passed": 78
+        },
+        "package_manifest_sha256": "ab1b34542b19d610103f1879c4fcd840f2baa0e08ca636c5937cbe86ba17c2f9",
+        "platform": "windows-x86_64"
+      }
+    ],
+    "schema_version": 1,
+    "scope": "Three successful native matched-source acceptance receipts and the actual common source ZIP agree",
+    "source_bundle": {
+      "builder_sha256": "52d7698ae4ca415b7515bf8bf030f5ac005a9726b6c1a553334400f4ecd9df4b",
+      "bytes": 34597131,
+      "filename": "Nova-Flux-2.3.1-FFmpeg-sources.zip",
+      "sha256": "2d455cac22950eabcadbd23f8e30a147d887516403c51821b1af766d80ca05f5",
+      "source_set_id": "nova-ffmpeg-8.1.3-2026-10-20",
+      "sources_lock_sha256": "9f7c2d77af528c4f19c57a415938376ddaccd64d10c59651ee1c7525a02ff19a"
+    },
+    "status": "PASS",
+    "version": "2.3.1"
+  },
+  "all_four_downloaded_archives_match_summary_checksums": "PASS",
+  "application": "Nova Flux",
+  "boundary_tests": {
+    "builder_contract": 12,
+    "scripts": 63,
+    "source_acquisition_and_bundle": 20
+  },
+  "evidence_date": "2026-10-21",
+  "independent_download_verification": {
+    "commit": "cbd04899b78ba81ae2172c08168676b4f9b0e751",
+    "platforms": [
+      {
+        "archive": {
+          "bytes": 70425819,
+          "filename": "Nova-Flux-2.3.1-macos-arm64.zip",
+          "sha256": "26ccbc34788338e7ec630fcbecc65c60a9027c392950450bac9f9fded06016c7"
+        },
+        "downloaded_png_integrity": "PASS",
+        "inventory_runtime_notices_privacy": "PASS",
+        "native_execution": "Not repeated locally; evidence comes from the native GitHub job",
+        "package_inventory_files": 2575,
+        "package_manifest_sha256": "84ae7dfb8d089cc2d4bdf0d1f45cbb3f4b0891f126a9e58fc36d899094d8bef3",
+        "platform": "macos-arm64",
+        "runtime_source_archives": 9,
+        "rust_notice_crates": 154,
+        "source_binding": "PASS",
+        "status": "PASS"
+      },
+      {
+        "archive": {
+          "bytes": 78461004,
+          "filename": "Nova-Flux-2.3.1-windows-x86_64.zip",
+          "sha256": "9917a8aaff44a3c88e86dc5a26eb6860d2582199d2476a64afc91f06de1a1cce"
+        },
+        "downloaded_png_integrity": "PASS",
+        "inventory_runtime_notices_privacy": "PASS",
+        "native_execution": "Not repeated locally; evidence comes from the native GitHub job",
+        "package_inventory_files": 1534,
+        "package_manifest_sha256": "ab1b34542b19d610103f1879c4fcd840f2baa0e08ca636c5937cbe86ba17c2f9",
+        "platform": "windows-x86_64",
+        "runtime_source_archives": 9,
+        "rust_notice_crates": 155,
+        "source_binding": "PASS",
+        "status": "PASS"
+      },
+      {
+        "archive": {
+          "bytes": 71314476,
+          "filename": "Nova-Flux-2.3.1-linux-x86_64.tar.gz",
+          "sha256": "718b5deae91b43777146ce6be1e7c385801ab0bba1a75475d05d4896eef05a01"
+        },
+        "downloaded_png_integrity": "PASS",
+        "inventory_runtime_notices_privacy": "PASS",
+        "native_execution": "Not repeated locally; evidence comes from the native GitHub job",
+        "package_inventory_files": 1728,
+        "package_manifest_sha256": "bbb6fba1723fbad4a5650a5afe3e1da340f1cf59c082faa77924c84a13387dc5",
+        "platform": "linux-x86_64",
+        "runtime_source_archives": 9,
+        "rust_notice_crates": 268,
+        "source_binding": "PASS",
+        "status": "PASS"
+      }
+    ],
+    "run_id": "39561785132",
+    "source_bundle_sha256": "2d455cac22950eabcadbd23f8e30a147d887516403c51821b1af766d80ca05f5",
+    "source_zip_independent_verification": "PASS",
+    "status": "PASS"
+  },
+  "limits": [
+    "Windows and Linux physical manual desktop acceptance not performed",
+    "macOS not notarized; Windows unsigned",
+    "Temporary CI validation artifacts expire after one day; retained receipts document this run"
+  ],
+  "native_jobs_and_aggregation": "PASS",
+  "native_receipts": {
+    "linux-x86_64": {
+      "archive": {
+        "bytes": 71314476,
+        "filename": "Nova-Flux-2.3.1-linux-x86_64.tar.gz",
+        "sha256": "718b5deae91b43777146ce6be1e7c385801ab0bba1a75475d05d4896eef05a01"
+      },
+      "commit": "cbd04899b78ba81ae2172c08168676b4f9b0e751",
+      "extracted_gui": {
+        "frames": 222,
+        "image": {
+          "bytes": 134218,
+          "height": 800,
+          "sha256": "a15be3b7d5dc349bb39e2ba3947456d0d5648521eb70f1d9b2956ee2298cbe34",
+          "width": 1180
+        },
+        "status": "PASS"
+      },
+      "native_gui": {
+        "frames": 221,
+        "image": {
+          "bytes": 134218,
+          "height": 800,
+          "sha256": "a15be3b7d5dc349bb39e2ba3947456d0d5648521eb70f1d9b2956ee2298cbe34",
+          "width": 1180
+        },
+        "status": "PASS"
+      },
+      "native_tests": {
+        "executables": 9,
+        "failed": 0,
+        "ignored": 0,
+        "passed": 100
+      },
+      "package_manifest_sha256": "bbb6fba1723fbad4a5650a5afe3e1da340f1cf59c082faa77924c84a13387dc5",
+      "platform": "linux-x86_64",
+      "schema_version": 1,
+      "scope": "Fresh native matched-source validation; not a published release",
+      "source_bundle": {
+        "builder_sha256": "52d7698ae4ca415b7515bf8bf030f5ac005a9726b6c1a553334400f4ecd9df4b",
+        "bytes": 34597131,
+        "filename": "Nova-Flux-2.3.1-FFmpeg-sources.zip",
+        "sha256": "2d455cac22950eabcadbd23f8e30a147d887516403c51821b1af766d80ca05f5",
+        "source_set_id": "nova-ffmpeg-8.1.3-2026-10-20",
+        "sources_lock_sha256": "9f7c2d77af528c4f19c57a415938376ddaccd64d10c59651ee1c7525a02ff19a"
+      },
+      "status": "PASS",
+      "version": "2.3.1"
+    },
+    "macos-arm64": {
+      "archive": {
+        "bytes": 70425819,
+        "filename": "Nova-Flux-2.3.1-macos-arm64.zip",
+        "sha256": "26ccbc34788338e7ec630fcbecc65c60a9027c392950450bac9f9fded06016c7"
+      },
+      "commit": "cbd04899b78ba81ae2172c08168676b4f9b0e751",
+      "extracted_gui": {
+        "frames": 124,
+        "image": {
+          "bytes": 150187,
+          "height": 800,
+          "sha256": "f4777cc372d3af0f39117e42143428f893f620e12b08a195b32e8fa091002653",
+          "width": 1180
+        },
+        "status": "PASS"
+      },
+      "native_gui": {
+        "frames": 161,
+        "image": {
+          "bytes": 150187,
+          "height": 800,
+          "sha256": "f4777cc372d3af0f39117e42143428f893f620e12b08a195b32e8fa091002653",
+          "width": 1180
+        },
+        "status": "PASS"
+      },
+      "native_tests": {
+        "executables": 9,
+        "failed": 0,
+        "ignored": 0,
+        "passed": 100
+      },
+      "package_manifest_sha256": "84ae7dfb8d089cc2d4bdf0d1f45cbb3f4b0891f126a9e58fc36d899094d8bef3",
+      "platform": "macos-arm64",
+      "schema_version": 1,
+      "scope": "Fresh native matched-source validation; not a published release",
+      "source_bundle": {
+        "builder_sha256": "52d7698ae4ca415b7515bf8bf030f5ac005a9726b6c1a553334400f4ecd9df4b",
+        "bytes": 34597131,
+        "filename": "Nova-Flux-2.3.1-FFmpeg-sources.zip",
+        "sha256": "2d455cac22950eabcadbd23f8e30a147d887516403c51821b1af766d80ca05f5",
+        "source_set_id": "nova-ffmpeg-8.1.3-2026-10-20",
+        "sources_lock_sha256": "9f7c2d77af528c4f19c57a415938376ddaccd64d10c59651ee1c7525a02ff19a"
+      },
+      "status": "PASS",
+      "version": "2.3.1"
+    },
+    "windows-x86_64": {
+      "archive": {
+        "bytes": 78461004,
+        "filename": "Nova-Flux-2.3.1-windows-x86_64.zip",
+        "sha256": "9917a8aaff44a3c88e86dc5a26eb6860d2582199d2476a64afc91f06de1a1cce"
+      },
+      "commit": "cbd04899b78ba81ae2172c08168676b4f9b0e751",
+      "extracted_gui": {
+        "frames": 27,
+        "image": {
+          "bytes": 145748,
+          "height": 768,
+          "sha256": "3278c10ddbd63c8eeea3a20a0eabcfb250ad90b636f6173d270d4499b1f32d0d",
+          "width": 1024
+        },
+        "status": "PASS"
+      },
+      "native_gui": {
+        "frames": 27,
+        "image": {
+          "bytes": 145748,
+          "height": 768,
+          "sha256": "3278c10ddbd63c8eeea3a20a0eabcfb250ad90b636f6173d270d4499b1f32d0d",
+          "width": 1024
+        },
+        "status": "PASS"
+      },
+      "native_tests": {
+        "executables": 9,
+        "failed": 0,
+        "ignored": 0,
+        "passed": 78
+      },
+      "package_manifest_sha256": "ab1b34542b19d610103f1879c4fcd840f2baa0e08ca636c5937cbe86ba17c2f9",
+      "platform": "windows-x86_64",
+      "schema_version": 1,
+      "scope": "Fresh native matched-source validation; not a published release",
+      "source_bundle": {
+        "builder_sha256": "52d7698ae4ca415b7515bf8bf030f5ac005a9726b6c1a553334400f4ecd9df4b",
+        "bytes": 34597131,
+        "filename": "Nova-Flux-2.3.1-FFmpeg-sources.zip",
+        "sha256": "2d455cac22950eabcadbd23f8e30a147d887516403c51821b1af766d80ca05f5",
+        "source_set_id": "nova-ffmpeg-8.1.3-2026-10-20",
+        "sources_lock_sha256": "9f7c2d77af528c4f19c57a415938376ddaccd64d10c59651ee1c7525a02ff19a"
+      },
+      "status": "PASS",
+      "version": "2.3.1"
+    }
+  },
+  "run_id": "39561785132",
+  "run_url": "https://github.com/mohamadrezamakanani-dotcom/nova-flux/actions/runs/39561785132",
+  "schema_version": 1,
+  "scope": "Fresh public matched-source native validation and independently downloaded artifacts; published v2.3.1 assets were not replaced",
+  "source_commit": "cbd04899b78ba81ae2172c08168676b4f9b0e751",
+  "status": "PASS",
+  "version": "2.3.1"
+}

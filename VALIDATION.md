@@ -82,6 +82,33 @@ acceptance. Final archives are independently extracted, inventory-checked and
 natively launched; their image chunk integrity and decompressed pixels are
 checked. Exact package and application hashes are in the linked receipt.
 
+## Fresh public workflow acceptance
+
+On 2026-10-21, public matched-source run
+[39561785132](https://github.com/mohamadrezamakanani-dotcom/nova-flux/actions/runs/39561785132)
+passed all three native jobs and the cross-platform source aggregation on commit
+`cbd04899b78ba81ae2172c08168676b4f9b0e751`. The complete runtime was rebuilt from
+the nine locked original archives on every host. Rust/media tests passed
+**100 macOS / 78 Windows / 100 Linux**, with zero failures or ignored tests.
+Formatting, Clippy, optimized builds, diagnosis, verified packaging and actual
+extracted-package rendering also passed. Boundary suites passed 63 script tests,
+20 source acquisition/bundle tests and 12 frozen builder contract tests.
+
+All three downloaded application archives and the common source ZIP matched the
+run's combined checksums. Independent local extraction rechecked every package
+inventory, runtime/source/notice binding and PNG integrity; recomputing the
+aggregation locally reproduced its report. The common source ZIP remains
+`2d455cac22950eabcadbd23f8e30a147d887516403c51821b1af766d80ca05f5`.
+The [retained public build receipt](docs/evidence/public-build-2.3.1.json) describes
+these fresh validation artifacts. Existing published v2.3.1 archives, tag and
+release receipt were not replaced. CI artifacts expire after one day.
+
+Additional physical Mac folder import, impossible-limit rejection, retry,
+two-file conversion, collision preservation, output reveal and settings
+restoration passed; see the [manual session receipt](docs/evidence/manual-macos-2.3.1-2026-10-21.json)
+and [manual acceptance matrix](docs/MANUAL_ACCEPTANCE.md) for exact scope and
+unperformed checks.
+
 ## Limits
 
 macOS is locally ad-hoc signed, **not Apple-notarized**. Windows executables are

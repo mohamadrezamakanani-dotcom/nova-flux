@@ -13,6 +13,17 @@ native compiler, SDK and system-library changes can change application and
 runtime binary bytes. See [verified packaging](VERIFIED_PACKAGING.md) for the
 package integrity contract and the existing release evidence.
 
+## Accepted public run
+
+[Run 39561785132](https://github.com/mohamadrezamakanani-dotcom/nova-flux/actions/runs/39561785132)
+passed all three native jobs and aggregation on 2026-10-21, using commit
+`cbd04899b78ba81ae2172c08168676b4f9b0e751`. Rust/media tests passed
+100 on macOS, 78 on Windows and 100 on Linux, with none failed or ignored.
+All four downloaded archives matched the combined checksums; package inventories,
+original sources, notices and rendered PNGs were independently checked locally.
+See the [retained acceptance receipt](evidence/public-build-2.3.1.json).
+This successful repeat did not replace the published v2.3.1 release assets.
+
 ## Start a run
 
 In GitHub, open **Actions → Public matched-source validation → Run workflow**

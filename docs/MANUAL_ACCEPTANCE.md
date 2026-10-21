@@ -14,9 +14,18 @@ results are in [VALIDATION.md](../VALIDATION.md) and
 | Extracted package diagnosis and framebuffer rendering | PASS | PASS | PASS |
 | Native picker and actual target-size UI conversion | PASS | NOT_RUN | NOT_RUN |
 | About & licenses and file-manager license navigation | PASS | NOT_RUN | NOT_RUN |
-| Manual folder selection and drag/drop | NOT_RUN | NOT_RUN | NOT_RUN |
-| Manual queue cancellation, retry, and close during work | NOT_RUN | NOT_RUN | NOT_RUN |
-| Manual keyboard/screen-reader acceptance | NOT_RUN | NOT_RUN | NOT_RUN |
+| Native folder import and destination selection | PASS | NOT_RUN | NOT_RUN |
+| Drag/drop import | NOT_RUN | NOT_RUN | NOT_RUN |
+| Output settings panel closes and reopens | PASS | NOT_RUN | NOT_RUN |
+| Impossible target reports an error without publishing output | PASS | NOT_RUN | NOT_RUN |
+| Retry failed items and complete a two-file target-size batch | PASS | NOT_RUN | NOT_RUN |
+| Existing destination and source bytes remain unchanged | PASS | NOT_RUN | NOT_RUN |
+| Reveal output in file manager and clear completed entries | PASS | NOT_RUN | NOT_RUN |
+| Queue cancellation during work | NOT_RUN | NOT_RUN | NOT_RUN |
+| Close during active work | NOT_RUN | NOT_RUN | NOT_RUN |
+| Restore user preferences and verify them after relaunch | PASS | NOT_RUN | NOT_RUN |
+| Keyboard-only acceptance | NOT_RUN | NOT_RUN | NOT_RUN |
+| Screen-reader acceptance | NOT_RUN | NOT_RUN | NOT_RUN |
 
 The Mac evidence is from macOS 27.0.1 / Apple M4 / Metal. Windows evidence is
 Windows Server 2022 / DX12 WARP; Linux is Ubuntu 22.04 / X11-Xvfb / Vulkan
@@ -24,6 +33,17 @@ llvmpipe. Physical Windows/Linux manual desktop acceptance remains **NOT_RUN**.
 Automated media tests cover more engine behavior than this manual table, but
 they do not count as direct user interaction. A missing manual result is not an
 automated failure.
+
+Additional physical Mac UI checks on 2026-10-21 used two generated 3,653,251-byte
+fixtures. A 1,000-byte limit failed clearly without publishing output. Retrying
+both files with a 500,000-byte limit produced two 487,714-byte outputs; independent
+full decoding confirmed 1920×1080, 30/1 fps, 90 frames and 3.008 seconds. The
+existing destination sentinel was preserved using a `_2` filename suffix, and
+both source hashes were unchanged. **Show file**, **Clear completed**, the output
+panel toggle, and exact preference restoration followed by relaunch were observed.
+See the [sanitized Mac session receipt](evidence/manual-macos-2.3.1-2026-10-21.json).
+Drag/drop, cancellation, closing during active work, keyboard-only operation and
+screen-reader use were not performed in that session and remain **NOT_RUN**.
 
 Use `PASS` for an observed expected result, `FAIL` for a reproduced mismatch,
 `PARTIAL` for an incomplete check, `NOT_RUN` for an unperformed check, and

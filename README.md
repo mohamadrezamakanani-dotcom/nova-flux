@@ -7,6 +7,7 @@
 <p align="center">Convert audio and video, set a verified file-size maximum, and keep original video dimensions.</p>
 
 [![Source validation](https://github.com/mohamadrezamakanani-dotcom/nova-flux/actions/workflows/source-validation.yml/badge.svg)](https://github.com/mohamadrezamakanani-dotcom/nova-flux/actions/workflows/source-validation.yml)
+[![Matched source build](https://github.com/mohamadrezamakanani-dotcom/nova-flux/actions/workflows/public-matched-validation.yml/badge.svg)](https://github.com/mohamadrezamakanani-dotcom/nova-flux/actions/workflows/public-matched-validation.yml)
 [![MIT application code](https://img.shields.io/badge/application-MIT-blue)](LICENSE)
 [![Release 2.3.1 prerelease](https://img.shields.io/badge/release-2.3.1%20prerelease-ff7657)](https://github.com/mohamadrezamakanani-dotcom/nova-flux/releases/tag/v2.3.1)
 
@@ -80,7 +81,9 @@ not a live UI recording or an encoding-speed benchmark. The sample retained
 
 Each runtime also passed 12 actual encode/probe/decode checks. The installed Mac app was used for a real 500,000-byte target conversion: **486,199 output bytes**, retaining **1920×1080, 30 fps and all 90 frames**. These results apply to the recorded hosts/revisions; manual physical Windows/Linux desktop acceptance remains unverified.
 
-The **Source validation** badge refers to the public source/media/UI workflow. It is separate from the [matched-runtime package evidence](docs/evidence/matched-2.3.1.json). [Validation details](VALIDATION.md) · [Manual acceptance matrix](docs/MANUAL_ACCEPTANCE.md) · [Public package-build workflow](docs/PUBLIC_RELEASE_BUILD.md)
+The **Source validation** badge refers to the automatic source/media/UI workflow. The **Matched source build** badge covers the manually dispatched complete native application/runtime/package build. Its [public acceptance run](https://github.com/mohamadrezamakanani-dotcom/nova-flux/actions/runs/39561785132) passed on all three hosts; downloaded archives and common sources were independently verified. [Retained build receipt](docs/evidence/public-build-2.3.1.json). Fresh validation artifacts do not replace the [published package evidence](docs/evidence/matched-2.3.1.json).
+
+[Validation details](VALIDATION.md) · [Manual acceptance matrix](docs/MANUAL_ACCEPTANCE.md) · [Public package-build workflow](docs/PUBLIC_RELEASE_BUILD.md)
 
 ## Help and contribute
 
