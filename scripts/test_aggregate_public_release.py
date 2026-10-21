@@ -20,7 +20,8 @@ class AggregatePublicReleaseTests(unittest.TestCase):
         recipe.mkdir(parents=True)
         (self.root / "Cargo.toml").write_text('[package]\nversion = "1.2.3"\n')
         (recipe / "build_runtime.py").write_bytes(b"builder")
-        (recipe / "sources.lock.json").write_text('{"source_set_id":"nova-test"}\n')
+        # Receipt hashes bind exact bytes; default text writes add CR on Windows.
+        (recipe / "sources.lock.json").write_bytes(b'{"source_set_id":"nova-test"}\n')
         self.commit = "a" * 40
         self.source = self.base / "Nova-Flux-1.2.3-FFmpeg-sources.zip"
         self.source.write_bytes(b"sources")
@@ -68,6 +69,12 @@ class AggregatePublicReleaseTests(unittest.TestCase):
     def test_common_zip_bytes_are_verified_independently_of_receipts(self):
         self.source.write_bytes(b"changed")
         with self.assertRaises(ValueError):
+            self.aggregate()
+
+    def test_newline_only_recipe_change_is_rejected_as_different_bytes(self):
+        lock = self.root / "scripts/runtime-source/sources.lock.json"
+        lock.write_bytes(lock.read_bytes().replace(b"\n", b"\r\n"))
+        with self.assertRaisesRegex(ValueError, "Native source binding differs"):
             self.aggregate()
 
     def test_all_three_unique_platforms_are_required(self):
